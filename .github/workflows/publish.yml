@@ -1,12 +1,8 @@
 name: Publish to NPM
 
 on:
-  workflow_dispatch:
-    inputs:
-      release_number:
-        description: "Release version number"
-        required: true
-        type: string
+  push:
+    branches: [main]
 
 jobs:
   build-and-publish:
@@ -27,20 +23,6 @@ jobs:
 
       - name: Build
         run: npm run build
-
-      - name: Update version
-        run: npm version ${{ github.event.inputs.release_number }} --no-git-tag-version
-
-      - name: Configure Git
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-      - name: Commit and push version update
-        run: |
-          git add package.json
-          git commit -m "Bump version to ${{ github.event.inputs.release_number }}"
-          git push
 
       - name: Publish to NPM
         run: npm publish
