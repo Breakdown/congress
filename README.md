@@ -5,17 +5,14 @@ A TypeScript client for the [congress.gov API](https://api.congress.gov/) that p
 ## Installation
 
 ```bash
-# npm
 npm install @breakdown_us/congress
 ```
 
 ```bash
-# yarn
 yarn add @breakdown_us/congress
 ```
 
 ```bash
-# pnpm
 pnpm add @breakdown_us/congress
 ```
 
@@ -216,12 +213,11 @@ try {
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## CI/CD
+## CI
 
-This project uses GitHub Actions for continuous integration and deployment, so if you're contributing you can PR with confidence!
+This project uses GitHub Actions for continuous integration, so if you're contributing you can PR with confidence!
 
-- **CI Workflow**: Runs on pull requests to verify code quality and build status.
-- **CD Workflow**: Automatically publishes to npm when changes are merged to main.
+- **CI Workflow**: Runs on pull requests to verify build status.
 
 ## License
 
