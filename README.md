@@ -1,16 +1,20 @@
 # @breakdown_us/congress
 
-A modern TypeScript client for the [congress.gov API](https://api.congress.gov/) that provides access to legislative information from the U.S. Congress.
+A TypeScript client for the [congress.gov API](https://api.congress.gov/) that provides strongly typed access to legislative information from the U.S. Congress. Source for types can be found at [LibraryOfCongress/api.congress.gov](https://github.com/LibraryOfCongress/api.congress.gov)
 
 ## Installation
 
 ```bash
 # npm
 npm install @breakdown_us/congress
+```
 
+```bash
 # yarn
 yarn add @breakdown_us/congress
+```
 
+```bash
 # pnpm
 pnpm add @breakdown_us/congress
 ```
@@ -39,10 +43,8 @@ const recentBills = await congressService.getBills({ limit: 10 });
 
 ## Features
 
-- Complete TypeScript support with full type definitions
-- Modern ESM and CommonJS module formats
-- Comprehensive coverage of the congress.gov API endpoints
-- Clean, Promise-based API
+- Complete TypeScript coverage of the congress.gov API endpoints with full type definitions
+- Clean, async API
 
 ## API Documentation
 
@@ -192,11 +194,11 @@ const dailyIssues = await congressService.getDailyCongressionalRecords();
 
 ### More Endpoints
 
-The package includes many more endpoints that cover the full range of the congress.gov API. Please refer to the TypeScript definitions for the complete list of available methods.
+The package includes many more endpoints that cover the full range of the congress.gov API (if one is missing, please open an Issue!). Please refer to the TypeScript definitions for the complete list of available methods.
 
 ## Error Handling
 
-The service throws errors with appropriate HTTP status codes:
+The service throws errors differing per status code we get from the congress.gov API:
 
 ```typescript
 try {
@@ -216,18 +218,10 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## CI/CD
 
-This project uses GitHub Actions for continuous integration and deployment:
+This project uses GitHub Actions for continuous integration and deployment, so if you're contributing you can PR with confidence!
 
 - **CI Workflow**: Runs on pull requests to verify code quality and build status.
 - **CD Workflow**: Automatically publishes to npm when changes are merged to main.
-- **Release Workflow**: Manual workflow to create new releases with semantic versioning.
-
-### Setting Up NPM Deployment
-
-To enable automated npm publishing, add an NPM access token as a GitHub secret:
-
-1. Generate an NPM token with publish permissions
-2. Add the token as a repository secret with the name `NPM_TOKEN`
 
 ## License
 
