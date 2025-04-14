@@ -1,0 +1,26 @@
+# Source
+src/
+
+# Configuration
+tsconfig.json
+tsconfig.*.json
+eslint.config.js
+.eslintrc
+.prettierrc
+
+# Tests
+tests/
+*.test.ts
+
+# Dev tools
+.github/
+.vscode/
+.idea/
+
+# Build artifacts
+*.tsbuildinfo
+
+# Other
+.DS_Store
+*.log
+node_modules/ 
