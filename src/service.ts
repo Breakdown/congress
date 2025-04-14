@@ -1320,6 +1320,8 @@ class CongressService {
       : "/summaries";
 
     return this.makeRequest(path, {
+      limit,
+      offset,
       ...(fromDateTime ? { fromDateTime: fromDateTime.toISOString() } : {}),
       ...(toDateTime ? { toDateTime: toDateTime.toISOString() } : {}),
     });
