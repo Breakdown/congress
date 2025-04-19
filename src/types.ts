@@ -143,6 +143,7 @@ export interface BaseBill {
 
 export interface BillsResponse {
   bills: BaseBill[];
+  pagination: PaginationInfo;
 }
 
 // Item Level Bill Response
