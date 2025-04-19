@@ -689,9 +689,8 @@ export interface SenateCommunicationListItem {
 }
 
 export interface SenateCommunicationsResponse {
-  senateCommunications: {
-    item: SenateCommunicationListItem[];
-  };
+  senateCommunications: SenateCommunicationListItem[];
+  pagination: PaginationInfo;
 }
 
 // Senate Communication Item Level Response
@@ -719,9 +718,8 @@ export interface CommitteeMeetingListItem {
 }
 
 export interface CommitteeMeetingsResponse {
-  committeeMeetings: {
-    item: CommitteeMeetingListItem[];
-  };
+  committeeMeetings: CommitteeMeetingListItem[];
+  pagination: PaginationInfo;
 }
 
 // Committee Meeting Item Level Response
@@ -836,9 +834,8 @@ export interface CommitteePrintListItem {
 }
 
 export interface CommitteePrintsResponse {
-  committeePrints: {
-    item: CommitteePrintListItem[];
-  };
+  committeePrints: CommitteePrintListItem[];
+  pagination: PaginationInfo;
 }
 
 // Committee Print Item Level Response
@@ -867,9 +864,8 @@ export interface CommitteePrintDetails {
 }
 
 export interface CommitteePrintResponse {
-  committeePrint: {
-    item: CommitteePrintDetails;
-  };
+  committeePrint: CommitteePrintDetails;
+  pagination: PaginationInfo;
 }
 
 // Committee Print Text Level Response
@@ -879,9 +875,8 @@ export interface CommitteePrintTextItem {
 }
 
 export interface CommitteePrintTextResponse {
-  text: {
-    item: CommitteePrintTextItem[];
-  };
+  text: CommitteePrintTextItem[];
+  pagination: PaginationInfo;
 }
 
 // Committee Report List Level Response
@@ -897,9 +892,8 @@ export interface CommitteeReportListItem {
 }
 
 export interface CommitteeReportsResponse {
-  reports: {
-    item: CommitteeReportListItem[];
-  };
+  reports: CommitteeReportListItem[];
+  pagination: PaginationInfo;
 }
 
 // Committee Report Item Level Response
@@ -953,9 +947,8 @@ export interface CommitteeReportTextItem {
 }
 
 export interface CommitteeReportTextResponse {
-  textVersions: {
-    item: CommitteeReportTextItem[];
-  };
+  textVersions: CommitteeReportTextItem[];
+  pagination: PaginationInfo;
 }
 
 // Daily Congressional Record Types
@@ -999,9 +992,7 @@ export interface DailyCongressionalRecordIssue {
       url: string;
     }[];
   };
-  sections: {
-    item: DailyCongressionalRecordSection[];
-  };
+  sections: DailyCongressionalRecordSection[];
 }
 
 export interface DailyCongressionalRecordListResponse {
@@ -1034,9 +1025,7 @@ export interface DailyCongressionalRecordArticlesResponse {
   articles: {
     section: {
       name: string;
-      sectionArticles: {
-        item: DailyCongressionalRecordArticle[];
-      };
+      sectionArticles: DailyCongressionalRecordArticle[];
     }[];
   };
   request: {
@@ -1057,13 +1046,8 @@ export interface HearingListItem {
 }
 
 export interface HearingsResponse {
-  hearings: {
-    item: HearingListItem[];
-  };
-  request: {
-    contentType: string;
-    format: string;
-  };
+  hearings: HearingListItem[];
+  pagination: PaginationInfo;
 }
 
 // Hearing Item Level Response
@@ -1117,9 +1101,7 @@ export interface HouseRequirementListItem {
 }
 
 export interface HouseRequirementsResponse {
-  houseRequirements: {
-    item: HouseRequirementListItem[];
-  };
+  houseRequirements: HouseRequirementListItem[];
   pagination: PaginationInfo;
 }
 
@@ -1185,9 +1167,8 @@ export interface NominationListItem {
 }
 
 export interface NominationsResponse {
-  nominations: {
-    item: NominationListItem[];
-  };
+  nominations: NominationListItem[];
+  pagination: PaginationInfo;
 }
 
 // Nomination Item Level Response
@@ -1243,9 +1224,8 @@ export interface NomineeItem {
 }
 
 export interface NomineesResponse {
-  nominees: {
-    item: NomineeItem[];
-  };
+  nominees: NomineeItem[];
+  pagination: PaginationInfo;
 }
 
 // Committees Level Response
@@ -1270,9 +1250,7 @@ export interface NominationCommitteeItem {
 }
 
 export interface NominationCommitteesResponse {
-  committees: {
-    item: NominationCommitteeItem[];
-  };
+  committees: NominationCommitteeItem[];
 }
 
 // Actions Level Response
@@ -1289,9 +1267,7 @@ export interface NominationAction {
 }
 
 export interface NominationActionsResponse {
-  actions: {
-    item: NominationAction[];
-  };
+  actions: NominationAction[];
 }
 
 // Hearings Level Response
@@ -1306,9 +1282,7 @@ export interface NominationHearingItem {
 }
 
 export interface NominationHearingsResponse {
-  hearings: {
-    item: NominationHearingItem[];
-  };
+  hearings: NominationHearingItem[];
 }
 
 // Summaries List Level Response
@@ -1336,9 +1310,7 @@ export interface SummaryListItem {
 }
 
 export interface SummariesListResponse {
-  summaries: {
-    summary: SummaryListItem[];
-  };
+  summaries: SummaryListItem[];
 }
 
 // Treaty List Level Response
@@ -1353,9 +1325,7 @@ export interface TreatyListItem {
   updateDate: string;
   parts?: {
     count: number;
-    urls: {
-      item: string[]; // URLs to treaty part items
-    };
+    urls: string[]; // URLs to treaty part items
   };
   titles: {
     title: string;
@@ -1368,9 +1338,7 @@ export interface TreatyListItem {
 }
 
 export interface TreatiesResponse {
-  treaties: {
-    item: TreatyListItem[];
-  };
+  treaties: TreatyListItem[];
 }
 
 // Treaty Item Level Response
@@ -1403,9 +1371,7 @@ export interface TreatyAction {
 }
 
 export interface TreatyActionsResponse {
-  actions: {
-    item: TreatyAction[];
-  };
+  actions: TreatyAction[];
 }
 
 // Treaty Text Level Response
@@ -1418,9 +1384,7 @@ export interface TreatyTextVersion {
 }
 
 export interface TreatyTextResponse {
-  textVersions: {
-    item: TreatyTextVersion[];
-  };
+  textVersions: TreatyTextVersion[];
 }
 
 // Treaty Committees Level Response
@@ -1445,7 +1409,5 @@ export interface TreatyCommitteeItem {
 }
 
 export interface TreatyCommitteesResponse {
-  committees: {
-    item: TreatyCommitteeItem[];
-  };
+  committees: TreatyCommitteeItem[];
 }
