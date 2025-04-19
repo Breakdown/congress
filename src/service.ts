@@ -62,10 +62,7 @@ class CongressService {
     this.apiKey = apiKey;
   }
 
-  private async makeRequest<T>(
-    path: string,
-    params: Record<string, any> = {}
-  ): Promise<T> {
+  private async makeRequest<T>(path: string, params: Record<string, any> = {}): Promise<T> {
     // Add format=json to all requests
     params = { ...params, format: "json" };
 
@@ -130,10 +127,8 @@ class CongressService {
    * Get the current congress in session
    * @returns The current congress number
    */
-  async getCurrentCongress(): Promise<number> {
-    const congresses = await this.getCongresses({ limit: 1 });
-    const currentCongress = congresses.congresses.item[0];
-    return parseInt(currentCongress.name.split("th")[0]);
+  async getCurrentCongress(): Promise<CongressResponse> {
+    return this.makeRequest("/congress/current");
   }
 
   /**
@@ -331,11 +326,7 @@ class CongressService {
   }
 
   // Get detailed information about a member
-  async getMember({
-    memberBioguideId,
-  }: {
-    memberBioguideId: string;
-  }): Promise<MemberResponse> {
+  async getMember({ memberBioguideId }: { memberBioguideId: string }): Promise<MemberResponse> {
     return this.makeRequest(`/member/${memberBioguideId}`);
   }
 
@@ -351,10 +342,7 @@ class CongressService {
     district: string;
     currentMember?: boolean;
   }): Promise<MembersResponse> {
-    return this.makeRequest(
-      `/member/congress/${congress}/${state}/${district}`,
-      { currentMember }
-    );
+    return this.makeRequest(`/member/congress/${congress}/${state}/${district}`, { currentMember });
   }
 
   // Get members by state
@@ -380,10 +368,7 @@ class CongressService {
   }: {
     memberBioguideId: string;
   } & PaginationParams): Promise<BillsResponse> {
-    return this.makeRequest(
-      `/member/${memberBioguideId}/sponsored-legislation`,
-      { limit, offset }
-    );
+    return this.makeRequest(`/member/${memberBioguideId}/sponsored-legislation`, { limit, offset });
   }
 
   // Get cosponsored legislation for a member
@@ -394,10 +379,10 @@ class CongressService {
   }: {
     memberBioguideId: string;
   } & PaginationParams): Promise<BillsResponse> {
-    return this.makeRequest(
-      `/member/${memberBioguideId}/cosponsored-legislation`,
-      { limit, offset }
-    );
+    return this.makeRequest(`/member/${memberBioguideId}/cosponsored-legislation`, {
+      limit,
+      offset,
+    });
   }
 
   /**
@@ -471,9 +456,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<SubjectsResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/subjects`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/subjects`);
   }
 
   /**
@@ -493,9 +476,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<SummariesResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/summaries`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/summaries`);
   }
 
   /**
@@ -535,9 +516,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<BillCommitteesResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/committees`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/committees`);
   }
 
   /**
@@ -594,9 +573,7 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<AmendmentsResponse> {
-    return this.makeRequest(
-      `/amendment/${congress}/${amendmentType}/${amendmentNumber}`
-    );
+    return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}`);
   }
 
   /**
@@ -660,9 +637,7 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<BillTextResponse> {
-    return this.makeRequest(
-      `/amendment/${congress}/${amendmentType}/${amendmentNumber}/text`
-    );
+    return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}/text`);
   }
 
   /**
@@ -682,9 +657,7 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<ActionsResponse> {
-    return this.makeRequest(
-      `/amendment/${congress}/${amendmentType}/${amendmentNumber}/actions`
-    );
+    return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}/actions`);
   }
 
   // Get amendments for a bill
@@ -697,9 +670,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<AmendmentsResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/amendments`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/amendments`);
   }
 
   // Fetch cosponsors for a bill
@@ -712,9 +683,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<CosponsorsResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/cosponsors`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/cosponsors`);
   }
 
   // Get related bills for a bill
@@ -727,17 +696,11 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<RelatedBillsResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/relatedbills`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/relatedbills`);
   }
 
   // Get laws - passed bills
-  async getLaws({
-    congress = ACTIVE_CONGRESS,
-  }: {
-    congress: number;
-  }): Promise<LawsResponse> {
+  async getLaws({ congress = ACTIVE_CONGRESS }: { congress: number }): Promise<LawsResponse> {
     return this.makeRequest(`/law/${congress}`);
   }
 
@@ -792,9 +755,7 @@ class CongressService {
     billType: string;
     billNumber: number;
   }): Promise<ActionsResponse> {
-    return this.makeRequest(
-      `/bill/${congress}/${billType}/${billNumber}/actions`
-    );
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/actions`);
   }
 
   // Get bound congressional record by date
@@ -874,9 +835,7 @@ class CongressService {
     congress?: number;
     chamber?: "house" | "senate";
   } & PaginationParams): Promise<CommitteesResponse> {
-    const path = congress
-      ? `/committee/${congress}${chamber ? `/${chamber}` : ""}`
-      : "/committee";
+    const path = congress ? `/committee/${congress}${chamber ? `/${chamber}` : ""}` : "/committee";
 
     return this.makeRequest(path, { limit, offset });
   }
@@ -937,10 +896,10 @@ class CongressService {
     chamber: "house";
     systemCode: string;
   } & PaginationParams): Promise<HouseCommunicationsResponse> {
-    return this.makeRequest(
-      `/committee/${chamber}/${systemCode}/house-communication`,
-      { limit, offset }
-    );
+    return this.makeRequest(`/committee/${chamber}/${systemCode}/house-communication`, {
+      limit,
+      offset,
+    });
   }
 
   /**
@@ -961,10 +920,10 @@ class CongressService {
     chamber: "senate";
     systemCode: string;
   } & PaginationParams): Promise<SenateCommunicationsResponse> {
-    return this.makeRequest(
-      `/committee/${chamber}/${systemCode}/senate-communication`,
-      { limit, offset }
-    );
+    return this.makeRequest(`/committee/${chamber}/${systemCode}/senate-communication`, {
+      limit,
+      offset,
+    });
   }
 
   /**
@@ -1002,9 +961,7 @@ class CongressService {
     chamber: "house" | "senate";
     eventId: string;
   }): Promise<CommitteeMeetingResponse> {
-    return this.makeRequest(
-      `/committee-meeting/${congress}/${chamber}/${eventId}`
-    );
+    return this.makeRequest(`/committee-meeting/${congress}/${chamber}/${eventId}`);
   }
 
   // Get list of committee prints
@@ -1034,9 +991,7 @@ class CongressService {
     chamber: "house" | "senate";
     jacketNumber: string;
   }): Promise<CommitteePrintResponse> {
-    return this.makeRequest(
-      `/committee-print/${congress}/${chamber}/${jacketNumber}`
-    );
+    return this.makeRequest(`/committee-print/${congress}/${chamber}/${jacketNumber}`);
   }
 
   // Get text formats for a committee print
@@ -1049,9 +1004,7 @@ class CongressService {
     chamber: "house" | "senate";
     jacketNumber: string;
   }): Promise<CommitteePrintTextResponse> {
-    return this.makeRequest(
-      `/committee-print/${congress}/${chamber}/${jacketNumber}/text`
-    );
+    return this.makeRequest(`/committee-print/${congress}/${chamber}/${jacketNumber}/text`);
   }
 
   // Get list of committee reports
@@ -1084,9 +1037,7 @@ class CongressService {
     part?: number;
   }): Promise<CommitteeReportResponse> {
     return this.makeRequest(
-      `/committee-report/${congress}/${reportType}/${reportNumber}${
-        part ? `/${part}` : ""
-      }`
+      `/committee-report/${congress}/${reportType}/${reportNumber}${part ? `/${part}` : ""}`
     );
   }
 
@@ -1103,9 +1054,7 @@ class CongressService {
     part?: number;
   }): Promise<CommitteeReportTextResponse> {
     return this.makeRequest(
-      `/committee-report/${congress}/${reportType}/${reportNumber}${
-        part ? `/${part}` : ""
-      }/text`
+      `/committee-report/${congress}/${reportType}/${reportNumber}${part ? `/${part}` : ""}/text`
     );
   }
 
@@ -1136,9 +1085,7 @@ class CongressService {
     volumeNumber: string;
     issueNumber: string;
   }): Promise<DailyCongressionalRecordIssueResponse> {
-    return this.makeRequest(
-      `/daily-congressional-record/${volumeNumber}/${issueNumber}`
-    );
+    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}`);
   }
 
   /**
@@ -1154,9 +1101,7 @@ class CongressService {
     volumeNumber: string;
     issueNumber: string;
   }): Promise<DailyCongressionalRecordArticlesResponse> {
-    return this.makeRequest(
-      `/daily-congressional-record/${volumeNumber}/${issueNumber}/articles`
-    );
+    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}/articles`);
   }
 
   /**
@@ -1176,9 +1121,7 @@ class CongressService {
     congress?: number;
     chamber?: "house" | "senate";
   } & PaginationParams): Promise<HearingsResponse> {
-    const path = congress
-      ? `/hearing/${congress}${chamber ? `/${chamber}` : ""}`
-      : "/hearing";
+    const path = congress ? `/hearing/${congress}${chamber ? `/${chamber}` : ""}` : "/hearing";
 
     return this.makeRequest(path, { limit, offset });
   }
@@ -1242,9 +1185,7 @@ class CongressService {
     type: "ec" | "pm" | "pt" | "ml";
     number: string;
   }): Promise<HouseCommunicationResponse> {
-    return this.makeRequest(
-      `/house-communication/${congress}/${type}/${number}`
-    );
+    return this.makeRequest(`/house-communication/${congress}/${type}/${number}`);
   }
 
   /**
@@ -1287,9 +1228,7 @@ class CongressService {
     type: "ec" | "pom" | "pm";
     number: string;
   }): Promise<SenateCommunicationResponse> {
-    return this.makeRequest(
-      `/senate-communication/${congress}/${type}/${number}`
-    );
+    return this.makeRequest(`/senate-communication/${congress}/${type}/${number}`);
   }
 
   /**

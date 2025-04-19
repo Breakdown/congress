@@ -5,6 +5,11 @@ export interface PaginationParams {
   offset?: number;
 }
 
+export interface PaginationInfo {
+  count: number;
+  next: string; // URL to next page
+}
+
 // Congress List Level Response
 export interface CongressSession {
   chamber: "House of Representatives" | "Senate";
@@ -16,35 +21,30 @@ export interface CongressSession {
 
 export interface CongressListItem {
   name: string; // e.g. "116th Congress"
-  startYear: number;
-  endYear: number;
-  sessions: {
-    item: CongressSession[];
-  };
+  startYear: string;
+  endYear: string;
+  sessions: CongressSession[];
   url: string;
 }
 
 export interface CongressesResponse {
-  congresses: {
-    item: CongressListItem[];
-  };
+  congresses: CongressListItem[];
 }
 
 // Congress Item Level Response
 export interface CongressDetails {
-  sessions: {
-    item: CongressSession[];
-  };
+  sessions: CongressSession[];
   name: string;
-  startYear: number;
-  endYear: number;
+  startYear: string;
+  endYear: string;
   updateDate: string; // ISO date string
-  number: number;
+  number: string;
   url: string;
 }
 
 export interface CongressResponse {
   congress: CongressDetails;
+  pagination: PaginationInfo;
 }
 
 export interface BaseMember {
@@ -58,18 +58,17 @@ export interface BaseMember {
   partyName: string;
   state: string;
   terms: {
-    item: {
-      chamber: string;
-      startYear: number;
-      endYear?: number;
-    }[];
-  };
+    chamber: string;
+    startYear: number;
+    endYear?: number;
+  }[];
   updateDate: string;
   url: string;
 }
 
 export interface MembersResponse {
   members: BaseMember[];
+  pagination: PaginationInfo;
 }
 
 export interface MemberDetails extends BaseMember {
@@ -78,10 +77,14 @@ export interface MemberDetails extends BaseMember {
     district: string;
     officeAddress: string;
     phoneNumber: string;
-    zipCode: string;
+    zipCode: number;
   };
   birthYear?: string;
   deathYear?: string;
+  sponsoredLegislation: {
+    count: number;
+    url: string;
+  };
   cosponsoredLegislation: {
     count: number;
     url: string;
@@ -93,23 +96,27 @@ export interface MemberDetails extends BaseMember {
   invertedOrderName: string;
   lastName: string;
   middleName?: string;
-  officialURL?: string;
+  officialWebsiteUrl?: string;
+  terms: {
+    chamber: string;
+    congress: number;
+    district?: number;
+    endYear?: number;
+    memberType: string;
+    startYear: number;
+    stateCode: string;
+    stateName: string;
+  }[];
   partyHistory?: {
     partyAbbreviation: string;
     partyName: string;
     startYear: number;
   }[];
   leadership?: {
-    item: {
-      type: string;
-      congress: number;
-      current: boolean;
-    }[];
-  };
-  sponsoredLegislation: {
-    count: number;
-    url: string;
-  };
+    type: string;
+    congress: number;
+    current: boolean;
+  }[];
 }
 
 export interface MemberResponse {
@@ -190,7 +197,7 @@ export interface BillDetails {
   laws?: {
     type: string; // "Public Law" or "Private Law"
     number: string;
-  };
+  }[];
   notes?: {
     text: string; // CDATA wrapped
   }[];
@@ -526,12 +533,10 @@ export interface CommitteeListItem {
     name: string;
   };
   subcommittees?: {
-    item: {
-      url: string;
-      systemCode: string;
-      name: string;
-    }[];
-  };
+    url: string;
+    systemCode: string;
+    name: string;
+  }[];
   chamber: "House" | "Senate" | "Joint";
   committeeTypeCode:
     | "Commission or Caucus"
@@ -545,9 +550,7 @@ export interface CommitteeListItem {
 }
 
 export interface CommitteesResponse {
-  committees: {
-    item: CommitteeListItem[];
-  };
+  committees: CommitteeListItem[];
 }
 
 // Committee Item Level Response
@@ -561,12 +564,10 @@ export interface CommitteeDetails {
   updateDate: string;
   isCurrent: boolean;
   subcommittees?: {
-    item: {
-      url: string;
-      systemCode: string;
-      name: string;
-    }[];
-  };
+    url: string;
+    systemCode: string;
+    name: string;
+  }[];
   name: string;
   chamber: "House" | "Senate" | "Joint";
   committeeTypeCode:
@@ -584,15 +585,7 @@ export interface CommitteeDetails {
     count: number;
     bills: {
       congress: number;
-      billType:
-        | "HR"
-        | "S"
-        | "HJRES"
-        | "SJRES"
-        | "HCONRES"
-        | "SCONRES"
-        | "HRES"
-        | "SRES";
+      billType: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
       billNumber: string;
       relationshipType: string;
       actionDate: string;
@@ -626,9 +619,7 @@ export interface CommitteeNominationItem {
 }
 
 export interface CommitteeNominationsResponse {
-  nominations: {
-    item: CommitteeNominationItem[];
-  };
+  nominations: CommitteeNominationItem[];
 }
 
 // House Communications Level Response
@@ -637,11 +628,7 @@ export interface HouseCommunicationItem {
   number: string;
   communicationType: {
     code: "EC" | "PM" | "PT" | "ML";
-    name:
-      | "Executive Communication"
-      | "Presidential Message"
-      | "Petition"
-      | "Memorial";
+    name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
   };
   congress: number;
   referralDate: string;
@@ -699,10 +686,7 @@ export interface SenateCommunicationListItem {
   number: string;
   communicationType: {
     code: "EC" | "POM" | "PM";
-    name:
-      | "Executive Communication"
-      | "Petition or Memorial"
-      | "Presidential Message";
+    name: "Executive Communication" | "Petition or Memorial" | "Presidential Message";
   };
   congress: number;
   url: string;
@@ -716,8 +700,7 @@ export interface SenateCommunicationsResponse {
 }
 
 // Senate Communication Item Level Response
-export interface SenateCommunicationDetails
-  extends SenateCommunicationListItem {
+export interface SenateCommunicationDetails extends SenateCommunicationListItem {
   abstract: string;
   congressionalRecordDate: string;
   committees?: {
@@ -835,15 +818,7 @@ export interface CommitteeMeetingDetails {
   relatedItems?: {
     bills?: {
       bill: {
-        type:
-          | "HR"
-          | "S"
-          | "HJRES"
-          | "SJRES"
-          | "HCONRES"
-          | "SCONRES"
-          | "HRES"
-          | "SRES";
+        type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
         number: string;
         congress: number;
         url: string;
@@ -905,15 +880,7 @@ export interface CommitteePrintDetails {
   associatedBills?: {
     item: {
       congress: number;
-      type:
-        | "HR"
-        | "S"
-        | "HJRES"
-        | "SJRES"
-        | "HCONRES"
-        | "SCONRES"
-        | "HRES"
-        | "SRES";
+      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
       number: string;
       url: string;
     }[];
@@ -996,15 +963,7 @@ export interface CommitteeReportDetails {
   associatedBills?: {
     item: {
       congress: number;
-      type:
-        | "HR"
-        | "S"
-        | "HJRES"
-        | "SJRES"
-        | "HCONRES"
-        | "SCONRES"
-        | "HRES"
-        | "SRES";
+      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
       number: string;
       url: string;
     }[];
@@ -1240,11 +1199,7 @@ export interface HouseRequirementMatchingCommunicationsResponse {
       number: string;
       communicationType: {
         code: "EC" | "PM" | "PT" | "ML";
-        name:
-          | "Executive Communication"
-          | "Presidential Message"
-          | "Petition"
-          | "Memorial";
+        name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
       };
       congress: number;
       url: string;
@@ -1404,15 +1359,7 @@ export interface NominationHearingsResponse {
 // Summaries List Level Response
 export interface SummaryBill {
   congress: number;
-  type:
-    | "HR"
-    | "S"
-    | "HJRES"
-    | "SJRES"
-    | "HCONRES"
-    | "SCONRES"
-    | "HRES"
-    | "SRES";
+  type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
   originChamber: "House" | "Senate";
   originChamberCode: "H" | "S";
   number: string;
