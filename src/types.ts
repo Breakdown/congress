@@ -649,28 +649,22 @@ export interface HouseCommunicationDetails extends HouseCommunicationItem {
   sessionNumber: string;
   isRulemaking: "Y" | "N";
   committees?: {
-    item: {
-      name: string;
-      referralDate: string;
-      systemCode: string;
-    }[];
-  };
+    name: string;
+    referralDate: string;
+    systemCode: string;
+  }[];
   matchingRequirements?: {
-    item: {
-      number: string;
-      URL: string;
-    }[];
-  };
+    number: string;
+    URL: string;
+  }[];
   reportNature?: string;
   submittingAgency?: string;
   submittingOfficial?: string;
   legalAuthority?: string;
   houseDocument?: {
-    item: {
-      citation: string;
-      title: string;
-    }[];
-  };
+    citation: string;
+    title: string;
+  }[];
 }
 
 export interface HouseCommunicationResponse {
@@ -705,12 +699,10 @@ export interface SenateCommunicationDetails extends SenateCommunicationListItem 
   abstract: string;
   congressionalRecordDate: string;
   committees?: {
-    item: {
-      name: string;
-      referralDate: string;
-      url: string;
-    }[];
-  };
+    name: string;
+    referralDate: string;
+    url: string;
+  }[];
 }
 
 export interface SenateCommunicationResponse {
@@ -743,12 +735,10 @@ export interface CommitteeMeetingDetails {
   date: string;
   chamber: "House" | "Senate" | "NoChamber";
   committees: {
-    item: {
-      systemCode: string;
-      url: string;
-      name: string;
-    }[];
-  };
+    systemCode: string;
+    url: string;
+    name: string;
+  }[];
   location?: {
     room?: string; // If virtual meeting via Webex, value will be 'WEBEX'
     building?: string; // If virtual meeting via Webex, value may be '----------'
@@ -762,56 +752,48 @@ export interface CommitteeMeetingDetails {
     };
   };
   videos?: {
-    item: {
-      name: string;
-      url: string;
-    }[];
-  };
+    name: string;
+    url: string;
+  }[];
   witnesses?: {
-    item: {
-      name: string;
-      position: string;
-      organization: string;
-    }[];
-  };
+    name: string;
+    position: string;
+    organization: string;
+  }[];
   witnessDocuments?: {
-    item: {
-      documentType:
-        | "Witness Biography"
-        | "Witness Supporting Document"
-        | "Witness Statement"
-        | "Witness Truth in Testimony";
-      format: string;
-      url: string;
-    }[];
-  };
+    documentType:
+      | "Witness Biography"
+      | "Witness Supporting Document"
+      | "Witness Statement"
+      | "Witness Truth in Testimony";
+    format: string;
+    url: string;
+  }[];
   meetingDocuments?: {
-    item: {
-      name: string;
-      description?: string;
-      documentType:
-        | "Activity Report"
-        | "Bills and Resolutions"
-        | "Committee Amendment"
-        | "Committee Recorded Vote"
-        | "Committee Report"
-        | "Committee Rules"
-        | "Conference Report"
-        | "Floor Amendment"
-        | "Generic Document"
-        | "Hearing: Cover Page"
-        | "Hearing: Member Roster"
-        | "Hearing: Questions for the Record"
-        | "Hearing: Table of Contents"
-        | "Hearing: Transcript"
-        | "Hearing: Witness List"
-        | "House or Senate Amendment"
-        | "Member Statements"
-        | "Support Document";
-      url: string;
-      format: string;
-    }[];
-  };
+    name: string;
+    description?: string;
+    documentType:
+      | "Activity Report"
+      | "Bills and Resolutions"
+      | "Committee Amendment"
+      | "Committee Recorded Vote"
+      | "Committee Report"
+      | "Committee Rules"
+      | "Conference Report"
+      | "Floor Amendment"
+      | "Generic Document"
+      | "Hearing: Cover Page"
+      | "Hearing: Member Roster"
+      | "Hearing: Questions for the Record"
+      | "Hearing: Table of Contents"
+      | "Hearing: Transcript"
+      | "Hearing: Witness List"
+      | "House or Senate Amendment"
+      | "Member Statements"
+      | "Support Document";
+    url: string;
+    format: string;
+  }[];
   hearingTranscript?: {
     jacketNumber: string;
     url: string;
@@ -826,22 +808,18 @@ export interface CommitteeMeetingDetails {
       }[];
     };
     treaties?: {
-      item: {
-        part?: string;
-        number: string;
-        congress: number;
-        url: string;
-      }[];
-    };
-    nominations?: {
-      item: {
-        part: string; // "00" if not partitioned
-        number: string;
-        congress: number;
-        url: string;
-      }[];
-    };
+      part?: string;
+      number: string;
+      congress: number;
+      url: string;
+    }[];
   };
+  nominations?: {
+    part: string; // "00" if not partitioned
+    number: string;
+    congress: number;
+    url: string;
+  }[];
 }
 
 export interface CommitteeMeetingResponse {
@@ -872,20 +850,16 @@ export interface CommitteePrintDetails {
   title: string;
   chamber: "House" | "Senate" | "NoChamber";
   committees: {
-    item: {
-      url: string;
-      systemCode: string;
-      name: string;
-    }[];
-  };
+    url: string;
+    systemCode: string;
+    name: string;
+  }[];
   associatedBills?: {
-    item: {
-      congress: number;
-      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
-      number: string;
-      url: string;
-    }[];
-  };
+    congress: number;
+    type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+    number: string;
+    url: string;
+  }[];
   text: {
     count: number;
     url: string;
@@ -931,12 +905,10 @@ export interface CommitteeReportsResponse {
 // Committee Report Item Level Response
 export interface CommitteeReportDetails {
   committees: {
-    item: {
-      url: string;
-      systemCode: string;
-      name: string;
-    }[];
-  };
+    url: string;
+    systemCode: string;
+    name: string;
+  }[];
   congress: number;
   chamber: "House" | "Senate";
   sessionNumber: "1" | "2";
@@ -954,21 +926,17 @@ export interface CommitteeReportDetails {
     url: string;
   };
   associatedTreaties?: {
-    item: {
-      congress: number;
-      number: string;
-      part?: string;
-      url: string;
-    }[];
-  };
+    congress: number;
+    number: string;
+    part?: string;
+    url: string;
+  }[];
   associatedBills?: {
-    item: {
-      congress: number;
-      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
-      number: string;
-      url: string;
-    }[];
-  };
+    congress: number;
+    type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+    number: string;
+    url: string;
+  }[];
 }
 
 export interface CommitteeReportResponse {
@@ -978,12 +946,10 @@ export interface CommitteeReportResponse {
 // Committee Report Text Level Response
 export interface CommitteeReportTextItem {
   formats: {
-    item: {
-      url: string;
-      type: "Formatted Text" | "PDF";
-      isErrata: "Y" | "N";
-    }[];
-  };
+    url: string;
+    type: "Formatted Text" | "PDF";
+    isErrata: "Y" | "N";
+  }[];
 }
 
 export interface CommitteeReportTextResponse {
@@ -1008,12 +974,10 @@ export interface DailyCongressionalRecordSection {
   startPage: string;
   endPage: string;
   text: {
-    item: {
-      part: string;
-      type: string;
-      url: string;
-    }[];
-  };
+    part: string;
+    type: string;
+    url: string;
+  }[];
   articles?: {
     count: number;
     url: string;
@@ -1030,15 +994,13 @@ export interface DailyCongressionalRecordIssue {
   updateDate: string;
   fullIssue: {
     entireIssue: {
-      item: {
-        part: string;
-        type: string; // e.g. "PDF", "Formatted Text"
-        url: string;
-      }[];
-    };
-    sections: {
-      item: DailyCongressionalRecordSection[];
-    };
+      part: string;
+      type: string; // e.g. "PDF", "Formatted Text"
+      url: string;
+    }[];
+  };
+  sections: {
+    item: DailyCongressionalRecordSection[];
   };
 }
 
@@ -1116,23 +1078,17 @@ export interface HearingDetails {
   citation?: string;
   chamber: "House" | "Senate" | "NoChamber";
   committees: {
-    item: {
-      name: string;
-      systemCode: string;
-      url: string;
-    }[];
-  };
+    name: string;
+    systemCode: string;
+    url: string;
+  }[];
   dates: {
-    item: {
-      date: string;
-    }[];
-  };
+    date: string;
+  }[];
   formats: {
-    item: {
-      type: "PDF" | "Formatted Text";
-      url: string;
-    }[];
-  };
+    type: "PDF" | "Formatted Text";
+    url: string;
+  }[];
   associatedMeeting?: {
     eventID: string;
     URL: string;
@@ -1195,17 +1151,15 @@ export interface HouseRequirementResponse {
 // House Requirement Matching Communications Level Response
 export interface HouseRequirementMatchingCommunicationsResponse {
   matchingCommunications: {
-    item: {
-      chamber: "House";
-      number: string;
-      communicationType: {
-        code: "EC" | "PM" | "PT" | "ML";
-        name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
-      };
-      congress: number;
-      url: string;
-    }[];
-  };
+    chamber: "House";
+    number: string;
+    communicationType: {
+      code: "EC" | "PM" | "PT" | "ML";
+      name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
+    };
+    congress: number;
+    url: string;
+  }[];
   pagination: PaginationInfo;
 }
 

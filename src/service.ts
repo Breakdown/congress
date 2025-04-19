@@ -119,7 +119,7 @@ class CongressService {
    * @param congress - The congress number (e.g. 117)
    * @returns CongressResponse containing detailed congress information including sessions, dates, and metadata
    */
-  async getCongress(congress: number): Promise<CongressResponse> {
+  async getCongress(congress: number | string): Promise<CongressResponse> {
     return this.makeRequest(`/congress/${congress}`);
   }
 
@@ -129,24 +129,6 @@ class CongressService {
    */
   async getCurrentCongress(): Promise<CongressResponse> {
     return this.makeRequest("/congress/current");
-  }
-
-  /**
-   * Check if Congress is currently in session
-   * @returns boolean indicating if Congress is in session
-   */
-  async isCongressInSession(): Promise<boolean> {
-    const currentCongress = await this.getCurrentCongress();
-    const congressDetails = await this.getCongress(currentCongress);
-
-    const now = new Date();
-    const sessions = congressDetails.congress.sessions.item;
-
-    return sessions.some((session) => {
-      const startDate = new Date(session.startDate);
-      const endDate = new Date(session.endDate);
-      return now >= startDate && now <= endDate;
-    });
   }
 
   /**
