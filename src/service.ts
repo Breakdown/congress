@@ -50,6 +50,7 @@ import {
   TreatyActionsResponse,
   TreatyTextResponse,
   TreatyCommitteesResponse,
+  SponsoredLegislationResponse,
 } from "./types";
 
 const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3";
@@ -155,44 +156,36 @@ class CongressService {
    * @param options - Query options
    * @param options.congress - The congress number (e.g. 117)
    * @param options.nominationNumber - The nomination number
-   * @param options.partNumber - Optional part number for partitioned nominations (e.g. "00" if not partitioned)
    * @returns NominationResponse containing detailed nomination information including description, dates, and related data
    */
   async getNomination({
     congress,
     nominationNumber,
-    partNumber,
   }: {
     congress: number;
     nominationNumber: string;
-    partNumber?: string;
   }): Promise<NominationResponse> {
-    const path = partNumber
-      ? `/nomination/${congress}/${nominationNumber}/${partNumber}`
-      : `/nomination/${congress}/${nominationNumber}`;
-    return this.makeRequest(path);
+    return this.makeRequest(`/nomination/${congress}/${nominationNumber}`);
   }
 
   /**
-   * Get nominees for a specific nomination
+   * Get nominees for a specific position within a nomination
    * @param options - Query options
    * @param options.congress - The congress number (e.g. 117)
    * @param options.nominationNumber - The nomination number
-   * @param options.partNumber - Optional part number for partitioned nominations
+   * @param options.ordinal - Optional part number for partitioned nominations
    * @returns NomineesResponse containing an array of nominee items with details like name, state, and dates
    */
   async getNominees({
     congress,
     nominationNumber,
-    partNumber,
+    ordinal,
   }: {
     congress: number;
     nominationNumber: string;
-    partNumber?: string;
+    ordinal: string;
   }): Promise<NomineesResponse> {
-    const path = partNumber
-      ? `/nomination/${congress}/${nominationNumber}/${partNumber}/nominees`
-      : `/nomination/${congress}/${nominationNumber}/nominees`;
+    const path = `/nomination/${congress}/${nominationNumber}/${ordinal}`;
     return this.makeRequest(path);
   }
 
@@ -201,66 +194,48 @@ class CongressService {
    * @param options - Query options
    * @param options.congress - The congress number (e.g. 117)
    * @param options.nominationNumber - The nomination number
-   * @param options.partNumber - Optional part number for partitioned nominations
    * @returns NominationCommitteesResponse containing committee information and activities
    */
   async getNominationCommittees({
     congress,
     nominationNumber,
-    partNumber,
   }: {
     congress: number;
     nominationNumber: string;
-    partNumber?: string;
   }): Promise<NominationCommitteesResponse> {
-    const path = partNumber
-      ? `/nomination/${congress}/${nominationNumber}/${partNumber}/committees`
-      : `/nomination/${congress}/${nominationNumber}/committees`;
-    return this.makeRequest(path);
+    return this.makeRequest(`/nomination/${congress}/${nominationNumber}/committees`);
   }
 
   /**
    * Get actions taken on a nomination
    * @param congress - The congress number (e.g. 117)
    * @param nominationNumber - The nomination number
-   * @param partNumber - Optional part number for partitioned nominations
    * @returns NominationActionsResponse
    */
   async getNominationActions({
     congress,
     nominationNumber,
-    partNumber,
   }: {
     congress: number;
     nominationNumber: string;
-    partNumber?: string;
   }): Promise<NominationActionsResponse> {
-    const path = partNumber
-      ? `/nomination/${congress}/${nominationNumber}/${partNumber}/actions`
-      : `/nomination/${congress}/${nominationNumber}/actions`;
-    return this.makeRequest(path);
+    return this.makeRequest(`/nomination/${congress}/${nominationNumber}/actions`);
   }
 
   /**
    * Get hearings associated with a nomination
    * @param congress - The congress number (e.g. 117)
    * @param nominationNumber - The nomination number
-   * @param partNumber - Optional part number for partitioned nominations
    * @returns NominationHearingsResponse
    */
   async getNominationHearings({
     congress,
     nominationNumber,
-    partNumber,
   }: {
     congress: number;
     nominationNumber: string;
-    partNumber?: string;
   }): Promise<NominationHearingsResponse> {
-    const path = partNumber
-      ? `/nomination/${congress}/${nominationNumber}/${partNumber}/hearings`
-      : `/nomination/${congress}/${nominationNumber}/hearings`;
-    return this.makeRequest(path);
+    return this.makeRequest(`/nomination/${congress}/${nominationNumber}/hearings`);
   }
 
   /**
@@ -297,13 +272,16 @@ class CongressService {
     limit = 20,
     offset = 0,
     congress = 119,
+    currentMember = true,
   }: {
     congress: number;
+    currentMember?: boolean;
   } & PaginationParams): Promise<MembersResponse> {
     return this.makeRequest(`/member/congress/${congress}`, {
       limit,
       offset,
       congress,
+      currentMember,
     });
   }
 
@@ -349,7 +327,7 @@ class CongressService {
     offset = 0,
   }: {
     memberBioguideId: string;
-  } & PaginationParams): Promise<BillsResponse> {
+  } & PaginationParams): Promise<SponsoredLegislationResponse> {
     return this.makeRequest(`/member/${memberBioguideId}/sponsored-legislation`, { limit, offset });
   }
 
@@ -360,7 +338,7 @@ class CongressService {
     offset = 0,
   }: {
     memberBioguideId: string;
-  } & PaginationParams): Promise<BillsResponse> {
+  } & PaginationParams): Promise<SponsoredLegislationResponse> {
     return this.makeRequest(`/member/${memberBioguideId}/cosponsored-legislation`, {
       limit,
       offset,

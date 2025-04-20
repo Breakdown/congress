@@ -6,7 +6,7 @@ export interface PaginationParams {
 }
 
 export interface PaginationInfo {
-  count: number;
+  count: number; // Total count of results possible for this route/response
   next: string; // URL to next page
 }
 
@@ -123,6 +123,23 @@ export interface MemberResponse {
   member: MemberDetails;
 }
 
+export interface BaseAmendment {
+  amendmentNumber: string;
+  congress: number;
+  introducedDate: string;
+  latestAction: {
+    actionDate: string;
+    text: string;
+  } | null;
+  type: string | null;
+  url: string;
+}
+
+export interface SponsoredLegislationResponse {
+  sponsoredLegislation: (BaseBill | BaseAmendment)[];
+  pagination: PaginationInfo;
+}
+
 // List Level Bill Response
 export interface BaseBill {
   congress: number;
@@ -133,6 +150,9 @@ export interface BaseBill {
   url: string;
   title: string;
   updateDateIncludingText: string;
+  policyArea?: {
+    name: string;
+  };
   latestAction: {
     actionDate: string;
     text: string;
@@ -1087,12 +1107,6 @@ export interface HearingResponse {
   };
 }
 
-export interface PaginationInfo {
-  count: number;
-  total: number;
-  offset: number;
-}
-
 // House Requirements List Level Response
 export interface HouseRequirementListItem {
   number: string;
@@ -1174,27 +1188,33 @@ export interface NominationsResponse {
 // Nomination Item Level Response
 export interface NominationDetails {
   congress: number;
-  number: string;
-  partNumber?: string;
-  citation: string;
-  isPrivileged: boolean;
-  isList: boolean;
+  number: number;
   description: string;
   receivedDate: string;
-  nominationType: {
+  updateDate: string;
+  partNumber?: string;
+  citation: string;
+  isPrivileged?: boolean;
+  isList?: boolean;
+  organization?: string;
+  nominationType?: {
     isCivilian: boolean;
     isMilitary: boolean;
   };
-  organization?: string;
-  nominees: {
+  // This is an array of the positions within the nomination - nominees are found with the URL in here
+  nominees?: {
+    introText: string;
+    nomineeCount: number;
+    ordinal: number;
+    organization: string;
+    positionTitle: string;
+    url: string;
+  }[];
+  committees?: {
     count: number;
     url: string;
   };
-  committees: {
-    count: number;
-    url: string;
-  };
-  actions: {
+  actions?: {
     count: number;
     url: string;
   };
@@ -1202,7 +1222,6 @@ export interface NominationDetails {
     count: number;
     url: string;
   };
-  updateDate: string;
 }
 
 export interface NominationResponse {
@@ -1268,16 +1287,17 @@ export interface NominationAction {
 
 export interface NominationActionsResponse {
   actions: NominationAction[];
+  pagination: PaginationInfo;
 }
 
 // Hearings Level Response
 export interface NominationHearingItem {
   chamber: "Senate";
-  number?: string;
+  number?: number;
   partNumber?: string;
   citation?: string;
-  jacketNumber: string;
-  errataNumber?: string;
+  jacketNumber: number;
+  errataNumber?: number;
   date: string;
 }
 
