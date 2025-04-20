@@ -461,6 +461,66 @@ class CongressService {
   }
 
   /**
+   * Get cosponsors for a bill
+   * @param options - Query options
+   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
+   * @param options.billType - The type of bill
+   * @param options.billNumber - The bill number
+   * @returns CosponsorsResponse containing cosponsors of the bill
+   */
+  async getCosponsorsForBill({
+    congress = ACTIVE_CONGRESS,
+    billType,
+    billNumber,
+  }: {
+    congress: number;
+    billType: string;
+    billNumber: number;
+  }): Promise<CosponsorsResponse> {
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/cosponsors`);
+  }
+
+  /**
+   * Get actions for a bill
+   * @param options - Query options
+   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
+   * @param options.billType - The type of bill
+   * @param options.billNumber - The bill number
+   * @returns ActionsResponse containing actions of the bill
+   */
+  async getActionsForBill({
+    congress = ACTIVE_CONGRESS,
+    billType,
+    billNumber,
+  }: {
+    congress: number;
+    billType: string;
+    billNumber: number;
+  }): Promise<ActionsResponse> {
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/actions`);
+  }
+
+  /**
+   * Get related bills for a bill
+   * @param options - Query options
+   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
+   * @param options.billType - The type of bill
+   * @param options.billNumber - The bill number
+   * @returns RelatedBillsResponse containing related bills
+   */
+  async getRelatedBills({
+    congress = ACTIVE_CONGRESS,
+    billType,
+    billNumber,
+  }: {
+    congress: number;
+    billType: string;
+    billNumber: number;
+  }): Promise<RelatedBillsResponse> {
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/relatedbills`);
+  }
+
+  /**
    * Get committees for a bill
    * @param options - Query options
    * @param options.congress - The congress number (default ACTIVE_CONGRESS)
@@ -480,7 +540,14 @@ class CongressService {
     return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/committees`);
   }
 
-  // Get amendments for a bill
+  /**
+   * Get amendments for a bill
+   * @param options - Query options
+   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
+   * @param options.billType - The type of bill
+   * @param options.billNumber - The bill number
+   * @returns AmendmentsResponse containing amendments of the bill
+   */
   async getAmendmentsForBill({
     congress = ACTIVE_CONGRESS,
     billType,
@@ -634,92 +701,25 @@ class CongressService {
     return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}/actions`);
   }
 
-  // Fetch cosponsors for a bill
-  async getCosponsorsForBill({
-    congress = ACTIVE_CONGRESS,
-    billType,
-    billNumber,
-  }: {
-    congress: number;
-    billType: string;
-    billNumber: number;
-  }): Promise<CosponsorsResponse> {
-    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/cosponsors`);
-  }
-
-  // Get related bills for a bill
-  async getRelatedBills({
-    congress = ACTIVE_CONGRESS,
-    billType,
-    billNumber,
-  }: {
-    congress: number;
-    billType: string;
-    billNumber: number;
-  }): Promise<RelatedBillsResponse> {
-    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/relatedbills`);
-  }
-
-  // Get laws - passed bills
+  /**
+   * Get laws - passed bills
+   * @param options - Query options
+   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
+   * @returns LawsResponse containing laws of the congress
+   */
   async getLaws({ congress = ACTIVE_CONGRESS }: { congress: number }): Promise<LawsResponse> {
     return this.makeRequest(`/law/${congress}`);
   }
 
   /**
-   * Get laws of a specific type
+   * Get bound congressional record by date
+   * NOTE: This data is so sparse that it's essentially useless, unless looking historically. Roughly a 1-2 year lag
    * @param options - Query options
-   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
-   * @param options.lawType - The type of law (e.g. "public", "private")
-   * @param options.limit - Number of results to return (default 20)
-   * @param options.offset - Number of results to skip (default 0)
-   * @returns LawsResponse containing an array of laws of the specified type
+   * @param options.year - The year
+   * @param options.month - The month
+   * @param options.day - The day
+   * @returns BoundCongressionalRecordResponse containing the bound congressional record
    */
-  async getLawsByType({
-    congress = ACTIVE_CONGRESS,
-    lawType,
-    limit = 20,
-    offset = 0,
-  }: {
-    congress: number;
-    lawType: string;
-  } & PaginationParams): Promise<LawsResponse> {
-    return this.makeRequest(`/law/${congress}/${lawType}`, { limit, offset });
-  }
-
-  /**
-   * Get detailed information about a specific law
-   * @param options - Query options
-   * @param options.congress - The congress number (default ACTIVE_CONGRESS)
-   * @param options.lawType - The type of law (e.g. "public", "private")
-   * @param options.lawNumber - The law number
-   * @returns LawsResponse containing detailed information about the specified law
-   */
-  async getLaw({
-    congress = ACTIVE_CONGRESS,
-    lawType,
-    lawNumber,
-  }: {
-    congress: number;
-    lawType: string;
-    lawNumber: string;
-  }): Promise<LawsResponse> {
-    return this.makeRequest(`/law/${congress}/${lawType}/${lawNumber}`);
-  }
-
-  // Get actions for a bill
-  async getActionsForBill({
-    congress = ACTIVE_CONGRESS,
-    billType,
-    billNumber,
-  }: {
-    congress: number;
-    billType: string;
-    billNumber: number;
-  }): Promise<ActionsResponse> {
-    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/actions`);
-  }
-
-  // Get bound congressional record by date
   async getBoundCongressionalRecord({
     year,
     month,
@@ -732,20 +732,62 @@ class CongressService {
     let path = `/bound-congressional-record/${year}`;
 
     if (month !== undefined) {
-      // Pad month with leading zero if needed
-      const monthStr = month.toString().padStart(2, "0");
-      path += `/${monthStr}`;
+      path += `/${month}`;
 
       if (day !== undefined) {
-        // Pad day with leading zero if needed
-        const dayStr = day.toString().padStart(2, "0");
-        path += `/${dayStr}`;
+        path += `/${day}`;
       }
     } else if (day !== undefined) {
       throw new Error("Cannot specify day without month");
     }
 
     return this.makeRequest(path);
+  }
+
+  /**
+   * Get list of daily Congressional Record issues
+   * @param volumeNumber - Optional volume number to filter by
+   * @returns DailyCongressionalRecordListResponse
+   */
+  async getDailyCongressionalRecords(
+    volumeNumber?: string
+  ): Promise<DailyCongressionalRecordListResponse> {
+    const path = volumeNumber
+      ? `/daily-congressional-record/${volumeNumber}`
+      : "/daily-congressional-record";
+    return this.makeRequest(path);
+  }
+
+  /**
+   * Get detailed information about a specific daily Congressional Record issue
+   * @param volumeNumber - The volume number
+   * @param issueNumber - The issue number
+   * @returns DailyCongressionalRecordIssueResponse
+   */
+  async getDailyCongressionalRecordIssue({
+    volumeNumber,
+    issueNumber,
+  }: {
+    volumeNumber: string;
+    issueNumber: string;
+  }): Promise<DailyCongressionalRecordIssueResponse> {
+    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}`);
+  }
+
+  /**
+   * Get articles from a specific daily Congressional Record issue
+   * @param volumeNumber - The volume number
+   * @param issueNumber - The issue number
+   * @returns DailyCongressionalRecordArticlesResponse
+   */
+  async getDailyCongressionalRecordArticles({
+    volumeNumber,
+    issueNumber,
+  }: {
+    volumeNumber: string;
+    issueNumber: string;
+  }): Promise<DailyCongressionalRecordArticlesResponse> {
+    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}/articles`);
   }
 
   /**
@@ -1017,52 +1059,6 @@ class CongressService {
     return this.makeRequest(
       `/committee-report/${congress}/${reportType}/${reportNumber}${part ? `/${part}` : ""}/text`
     );
-  }
-
-  /**
-   * Get list of daily Congressional Record issues
-   * @param volumeNumber - Optional volume number to filter by
-   * @returns DailyCongressionalRecordListResponse
-   */
-  async getDailyCongressionalRecords(
-    volumeNumber?: string
-  ): Promise<DailyCongressionalRecordListResponse> {
-    const path = volumeNumber
-      ? `/daily-congressional-record/${volumeNumber}`
-      : "/daily-congressional-record";
-    return this.makeRequest(path);
-  }
-
-  /**
-   * Get detailed information about a specific daily Congressional Record issue
-   * @param volumeNumber - The volume number
-   * @param issueNumber - The issue number
-   * @returns DailyCongressionalRecordIssueResponse
-   */
-  async getDailyCongressionalRecordIssue({
-    volumeNumber,
-    issueNumber,
-  }: {
-    volumeNumber: string;
-    issueNumber: string;
-  }): Promise<DailyCongressionalRecordIssueResponse> {
-    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}`);
-  }
-
-  /**
-   * Get articles from a specific daily Congressional Record issue
-   * @param volumeNumber - The volume number
-   * @param issueNumber - The issue number
-   * @returns DailyCongressionalRecordArticlesResponse
-   */
-  async getDailyCongressionalRecordArticles({
-    volumeNumber,
-    issueNumber,
-  }: {
-    volumeNumber: string;
-    issueNumber: string;
-  }): Promise<DailyCongressionalRecordArticlesResponse> {
-    return this.makeRequest(`/daily-congressional-record/${volumeNumber}/${issueNumber}/articles`);
   }
 
   /**

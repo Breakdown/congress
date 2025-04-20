@@ -290,12 +290,12 @@ export interface RelatedBillsResponse {
     congress: number;
     number: string;
     type: string;
-    latestAction: {
+    latestAction?: {
       actionDate: string;
       text: string;
       actionTime?: string;
     };
-    relationshipDetails: {
+    relationshipDetails?: {
       type: string;
       identifiedBy: string; // "House", "Senate", or "CRS"
     }[];
@@ -494,8 +494,15 @@ export interface AmendmentResponse {
 }
 
 // Laws Response
+export interface LawListItem extends BaseBill {
+  laws: {
+    number: string;
+    type: string;
+  }[];
+}
 export interface LawsResponse {
-  bills: BaseBill[];
+  laws: LawListItem[];
+  pagination: PaginationInfo;
 }
 
 // House Floor Schedule Response (from docs.house.gov)
@@ -569,6 +576,7 @@ export interface BoundCongressionalRecordItem {
 
 export interface BoundCongressionalRecordResponse {
   boundCongressionalRecord: BoundCongressionalRecordItem[];
+  pagination: PaginationInfo;
 }
 
 // CRS Report Types
@@ -1066,10 +1074,10 @@ export interface DailyCongressionalRecordSection {
 
 export interface DailyCongressionalRecordIssue {
   issueNumber: string;
-  volumeNumber: string;
+  volumeNumber: number;
   issueDate: string;
-  congress: string;
-  sessionNumber: string; // "1" or "2"
+  congress: number;
+  sessionNumber: number; // 1 or 2
   url: string;
   updateDate: string;
   fullIssue: {
@@ -1078,34 +1086,29 @@ export interface DailyCongressionalRecordIssue {
       type: string; // e.g. "PDF", "Formatted Text"
       url: string;
     }[];
+    sections: DailyCongressionalRecordSection[];
+    articles?: {
+      count: number;
+      url: string;
+    };
   };
-  sections: DailyCongressionalRecordSection[];
 }
 
 export interface DailyCongressionalRecordListResponse {
   dailyCongressionalRecord: {
-    issue: {
-      issueNumber: string;
-      volumeNumber: string;
-      issueDate: string;
-      congress: string;
-      sessionNumber: string;
-      url: string;
-      updateDate: string;
-    }[];
-  };
-  request: {
-    contentType: string;
-    format: string;
-  };
+    issueNumber: string;
+    volumeNumber: number;
+    issueDate: string;
+    congress: number;
+    sessionNumber: number;
+    url: string;
+    updateDate: string;
+  }[];
+  pagination: PaginationInfo;
 }
 
 export interface DailyCongressionalRecordIssueResponse {
   issue: DailyCongressionalRecordIssue;
-  request: {
-    contentType: string;
-    format: string;
-  };
 }
 
 export interface DailyCongressionalRecordArticlesResponse {
@@ -1114,10 +1117,6 @@ export interface DailyCongressionalRecordArticlesResponse {
       name: string;
       sectionArticles: DailyCongressionalRecordArticle[];
     }[];
-  };
-  request: {
-    contentType: string;
-    format: string;
   };
 }
 
