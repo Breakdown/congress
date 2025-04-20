@@ -367,7 +367,7 @@ class CongressService {
     updatedAfter?: Date;
     updatedBefore?: Date;
     congress?: number;
-    sort?: string;
+    sort?: "updateDate+desc" | "updateDate+asc";
   } & PaginationParams): Promise<BillsResponse> {
     const path = congress ? `/bill${congress ? `/${congress}` : ``}` : "/bill";
     return this.makeRequest(path, {
@@ -387,7 +387,7 @@ class CongressService {
    * @param options.billNumber - The bill number
    * @returns BillResponse containing detailed bill information including sponsors, committees, actions, and related content
    */
-  async getBill({
+  async getBillDetails({
     congress = ACTIVE_CONGRESS,
     billType,
     billNumber,

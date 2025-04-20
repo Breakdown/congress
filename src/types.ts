@@ -176,7 +176,8 @@ export interface BillDetails {
   introducedDate: string;
   congress: number;
   constitutionalAuthorityStatementText?: string; // Only for House Bills and Joint Resolutions
-  committees: {
+  title: string;
+  committees?: {
     count: number;
     url: string;
   };
@@ -184,11 +185,11 @@ export interface BillDetails {
     citation: string;
     url: string;
   }[];
-  relatedBills: {
+  relatedBills?: {
     count: number;
     url: string;
   };
-  actions: {
+  actions?: {
     count: number;
     url: string;
   };
@@ -216,33 +217,32 @@ export interface BillDetails {
     description: string;
   }[];
   laws?: {
-    type: string; // "Public Law" or "Private Law"
+    type: "Public Law" | "Private Law";
     number: string;
   }[];
   notes?: {
     text: string; // CDATA wrapped
   }[];
-  policyArea: {
+  policyArea?: {
     name: string;
   };
   subjects: {
     count: number;
     url: string;
   };
-  summaries: {
+  summaries?: {
     count: number;
     url: string;
   };
-  title: string;
-  titles: {
+  titles?: {
     count: number;
     url: string;
   };
-  amendments: {
+  amendments?: {
     count: number;
     url: string;
   };
-  textVersions: {
+  textVersions?: {
     count: number;
     url: string;
   };
@@ -279,6 +279,7 @@ export interface BillCommitteesResponse {
       date: string;
     }[];
   }[];
+  pagination: PaginationInfo;
 }
 
 // Related Bills Level Response
@@ -361,11 +362,13 @@ export interface CosponsorsResponse {
 export interface SubjectsResponse {
   legislativeSubjects: {
     name: string;
+    updateDate?: string;
   }[];
   policyArea: {
     name: string;
     updateDate: string;
   };
+  pagination: PaginationInfo;
 }
 
 // Summaries Level Response
@@ -375,10 +378,12 @@ export interface BillSummaryResponse {
   actionDesc: string;
   updateDate: string;
   text: string; // CDATA wrapped with HTML
+  pagination: PaginationInfo;
 }
 
 export interface SummariesResponse {
   summaries: BillSummaryResponse[];
+  pagination: PaginationInfo;
 }
 
 // Titles Level Response
@@ -398,8 +403,8 @@ export interface TitlesResponse {
 // Text Level Response
 export interface BillTextVersion {
   type: string;
-  date: string;
-  formats: {
+  date?: string;
+  formats?: {
     url: string;
     type: string; // "Formatted Text", "PDF", "Formatted XML"
   }[];
@@ -407,6 +412,7 @@ export interface BillTextVersion {
 
 export interface BillTextResponse {
   textVersions: BillTextVersion[];
+  pagination: PaginationInfo;
 }
 
 // Amendments Level Response
