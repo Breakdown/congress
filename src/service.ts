@@ -480,6 +480,19 @@ class CongressService {
     return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/committees`);
   }
 
+  // Get amendments for a bill
+  async getAmendmentsForBill({
+    congress = ACTIVE_CONGRESS,
+    billType,
+    billNumber,
+  }: {
+    congress: number;
+    billType: string;
+    billNumber: number;
+  }): Promise<AmendmentsResponse> {
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/amendments`);
+  }
+
   /**
    * Get a list of amendments
    * @param options - Query options
@@ -619,19 +632,6 @@ class CongressService {
     amendmentNumber: string;
   }): Promise<ActionsResponse> {
     return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}/actions`);
-  }
-
-  // Get amendments for a bill
-  async getAmendmentsForBill({
-    congress = ACTIVE_CONGRESS,
-    billType,
-    billNumber,
-  }: {
-    congress: number;
-    billType: string;
-    billNumber: number;
-  }): Promise<AmendmentsResponse> {
-    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/amendments`);
   }
 
   // Fetch cosponsors for a bill

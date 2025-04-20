@@ -334,6 +334,7 @@ export interface BillAction {
 
 export interface ActionsResponse {
   actions: BillAction[];
+  pagination: PaginationInfo;
 }
 
 // Cosponsors Level Response
@@ -420,16 +421,16 @@ export interface AmendmentsResponse {
   amendments: {
     congress: number;
     number: string;
+    url: string;
+    type: "HAMDT" | "SAMDT" | "SUAMDT";
     description?: string; // Only for House amendments
     purpose?: string; // Only for House and proposed Senate amendments
-    type: "HAMDT" | "SAMDT" | "SUAMDT";
     updateDate?: string;
     latestAction?: {
       actionDate: string;
       text: string;
       actionTime?: string;
     };
-    url: string;
   }[];
   pagination: PaginationInfo;
 }
