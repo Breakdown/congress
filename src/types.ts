@@ -347,7 +347,7 @@ export interface CosponsorsResponse {
     party: string; // "D", "R", "I", "ID", "L"
     state: string;
     url: string;
-    district: number;
+    district?: number;
     sponsorshipDate: string;
     isOriginalCosponsor: boolean;
     sponsorshipWithdrawnDate?: string;
@@ -418,18 +418,78 @@ export interface BillTextResponse {
 // Amendments Level Response
 export interface AmendmentsResponse {
   amendments: {
+    congress: number;
     number: string;
     description?: string; // Only for House amendments
     purpose?: string; // Only for House and proposed Senate amendments
-    congress: number;
-    type: string; // "HAMDT", "SAMDT", "SUAMDT"
-    latestAction: {
+    type: "HAMDT" | "SAMDT" | "SUAMDT";
+    updateDate?: string;
+    latestAction?: {
       actionDate: string;
       text: string;
       actionTime?: string;
     };
     url: string;
   }[];
+  pagination: PaginationInfo;
+}
+
+// Amendment Level Response
+export interface AmendmentDetails {
+  actions: {
+    count: number;
+    url: string;
+  };
+  amendedBill?: {
+    congress: number;
+    number: string;
+    originChamber: string;
+    originChamberCode: string;
+    title: string;
+    type: string;
+    updateDateIncludingText: string;
+    url: string;
+  };
+  chamber: "House" | "Senate";
+  congress: number;
+  description?: string; // Only for House amendments
+  latestAction: {
+    actionDate: string;
+    links?: {
+      name: string;
+      url: string;
+    }[];
+    text: string;
+  };
+  number: string;
+  onBehalfOfSponsor?: {
+    bioguideId: string;
+    firstName: string;
+    fullName: string;
+    lastName: string;
+    party: string;
+    state: string;
+    type: "Submitted on behalf of" | "Proposed on behalf of";
+    url: string;
+  }[];
+  proposedDate?: string; // ISO date string
+  purpose?: string; // Only for House and proposed Senate amendments
+  sponsors?: {
+    bioguideId: string;
+    firstName: string;
+    fullName: string;
+    lastName: string;
+    party: string;
+    state: string;
+    url: string;
+  }[];
+  submittedDate?: string; // ISO date string
+  type: "HAMDT" | "SAMDT" | "SUAMDT";
+  updateDate: string; // ISO date string
+}
+
+export interface AmendmentResponse {
+  amendment: AmendmentDetails;
 }
 
 // Laws Response

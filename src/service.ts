@@ -51,6 +51,7 @@ import {
   TreatyTextResponse,
   TreatyCommitteesResponse,
   SponsoredLegislationResponse,
+  AmendmentResponse,
 } from "./types";
 
 const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3";
@@ -524,7 +525,7 @@ class CongressService {
    * @param options.amendmentNumber - The amendment number
    * @returns AmendmentsResponse containing detailed amendment information
    */
-  async getAmendment({
+  async getAmendmentDetails({
     congress,
     amendmentType,
     amendmentNumber,
@@ -532,7 +533,7 @@ class CongressService {
     congress: number;
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
-  }): Promise<AmendmentsResponse> {
+  }): Promise<AmendmentResponse> {
     return this.makeRequest(`/amendment/${congress}/${amendmentType}/${amendmentNumber}`);
   }
 
