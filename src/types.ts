@@ -581,28 +581,30 @@ export interface BoundCongressionalRecordResponse {
 
 // CRS Report Types
 export interface CRSReportBase {
-  status: string; // e.g. "active" or "archived"
-  id: string; // e.g. "R40097"
+  status: string; // e.g. "Active" or "Archived"
+  id: string; // e.g. "94-166" or "R40097"
   publishDate: string; // Format: YYYY-MM-DDT00:00:00Z
-  version: string;
-  contentType: string; // "reports" | "posts" | "resources" | "infographics" | "testimony"
+  version: number; // The version number of the report
+  contentType: string; // e.g. "Reports", "Posts", "Resources", "Infographics", "Testimony"
   updateDate: string; // Format: YYYY-MM-DDT00:00:00Z
   title: string;
-  url: string;
+  url: string; // URL to the report page on congress.gov
 }
 
 export interface CRSReportDetails extends CRSReportBase {
-  authors: string[];
+  authors: {
+    author: string;
+  }[];
   formats: {
-    type: string;
+    format: string; // e.g. "PDF", "HTML"
     url: string;
   }[];
   relatedMaterials?: {
-    title: string;
-    congress?: string;
+    title: string | null;
+    congress?: number;
     number?: string;
-    type?: string; // "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES" | "PUB" | "PRIV"
-    url?: string;
+    type?: string; // e.g. "PUB", "PRIV", "HR", "S"
+    URL: string; // URL to the related material API endpoint
   }[];
   topics: {
     topic: string;
@@ -611,11 +613,18 @@ export interface CRSReportDetails extends CRSReportBase {
 }
 
 export interface CRSReportsResponse {
-  CRSreports: CRSReportBase[];
+  CRSReports: CRSReportBase[];
+  pagination?: PaginationInfo; // Assuming pagination might exist here too for list endpoints
 }
 
 export interface CRSReportResponse {
-  CRSreport: CRSReportDetails;
+  CRSReport: CRSReportDetails; // Note the key is singular "CRSReport"
+  request?: {
+    contentType: string;
+    format: string;
+    report_id?: string; // Including report_id based on example
+    [key: string]: any; // Allow other potential request params
+  };
 }
 
 // Committee List Level Response
