@@ -7,7 +7,8 @@ export interface PaginationParams {
 
 export interface PaginationInfo {
   count: number; // Total count of results possible for this route/response
-  next: string; // URL to next page
+  next?: string; // URL to next page
+  prev?: string; // URL to previous page
 }
 
 // Congress List Level Response
@@ -1421,34 +1422,37 @@ export interface SummaryListItem {
 
 export interface SummariesListResponse {
   summaries: SummaryListItem[];
+  pagination: PaginationInfo;
 }
 
 // Treaty List Level Response
 export interface TreatyListItem {
   congressReceived: number;
-  congressConsidered?: number;
+  congressConsidered?: number | null;
   number: string;
   suffix?: string; // Part identifier if treaty was partitioned (e.g. "A", "B", "C")
   transmittedDate: string;
-  resolutionText?: string; // CDATA wrapped with HTML
+  // resolutionText?: string; // CDATA wrapped with HTML
   topic: string;
   updateDate: string;
   parts?: {
     count: number;
     urls: string[]; // URLs to treaty part items
   };
-  titles: {
-    title: string;
-    titleType: string;
-  }[];
-  actions: {
-    count: number;
-    url: string;
-  };
+  // titles: {
+  //   title: string;
+  //   titleType: string;
+  // }[];
+  // Unverified
+  // actions: {
+  //   count: number;
+  //   url: string;
+  // };
 }
 
 export interface TreatiesResponse {
   treaties: TreatyListItem[];
+  pagination: PaginationInfo;
 }
 
 // Treaty Item Level Response

@@ -624,6 +624,41 @@ class CongressService {
   }
 
   /**
+   * Get a list of bill summaries
+   * @param congress - Optional congress number to filter by (e.g. 117)
+   * @param billType - Optional bill type to filter by (e.g. "hr", "s")
+   * @param fromDateTime - Optional date to get summaries published after
+   * @param toDateTime - Optional date to get summaries published before
+   * @param limit - Number of results to return (default 20)
+   * @param offset - Number of results to skip (default 0)
+   * @returns SummariesListResponse
+   */
+  async getSummaries({
+    congress,
+    billType,
+    fromDateTime,
+    toDateTime,
+    limit = 20,
+    offset = 0,
+  }: {
+    congress?: number;
+    billType?: string;
+    fromDateTime?: Date;
+    toDateTime?: Date;
+  } & PaginationParams): Promise<SummariesListResponse> {
+    const path = congress
+      ? `/summaries/${congress}${billType ? `/${billType}` : ""}`
+      : "/summaries";
+
+    return this.makeRequest(path, {
+      limit,
+      offset,
+      ...(fromDateTime ? { fromDateTime: fromDateTime.toISOString() } : {}),
+      ...(toDateTime ? { toDateTime: toDateTime.toISOString() } : {}),
+    });
+  }
+
+  /**
    * Retrieves a list of amendments, optionally filtered by congress, type, and update date.
    * @param options - Optional query and pagination parameters.
    * @param options.congress - The specific congress number to filter amendments by (e.g., 117).
@@ -1253,41 +1288,6 @@ class CongressService {
     number: string;
   }): Promise<SenateCommunicationResponse> {
     return this.makeRequest(`/senate-communication/${congress}/${type}/${number}`);
-  }
-
-  /**
-   * Get a list of bill summaries
-   * @param congress - Optional congress number to filter by (e.g. 117)
-   * @param billType - Optional bill type to filter by (e.g. "hr", "s")
-   * @param fromDateTime - Optional date to get summaries published after
-   * @param toDateTime - Optional date to get summaries published before
-   * @param limit - Number of results to return (default 20)
-   * @param offset - Number of results to skip (default 0)
-   * @returns SummariesListResponse
-   */
-  async getSummaries({
-    congress,
-    billType,
-    fromDateTime,
-    toDateTime,
-    limit = 20,
-    offset = 0,
-  }: {
-    congress?: number;
-    billType?: string;
-    fromDateTime?: Date;
-    toDateTime?: Date;
-  } & PaginationParams): Promise<SummariesListResponse> {
-    const path = congress
-      ? `/summaries/${congress}${billType ? `/${billType}` : ""}`
-      : "/summaries";
-
-    return this.makeRequest(path, {
-      limit,
-      offset,
-      ...(fromDateTime ? { fromDateTime: fromDateTime.toISOString() } : {}),
-      ...(toDateTime ? { toDateTime: toDateTime.toISOString() } : {}),
-    });
   }
 
   /**
