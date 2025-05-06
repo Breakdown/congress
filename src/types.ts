@@ -38,7 +38,7 @@ export interface CongressDetails {
   name: string;
   startYear: string;
   endYear: string;
-  updateDate: string; // ISO date string
+  updateDate: string;
   number: string;
   url: string;
 }
