@@ -945,7 +945,7 @@ export interface CommitteeMeetingResponse {
 
 // Committee Print List Level Response
 export interface CommitteePrintListItem {
-  jacketNumber: string;
+  jacketNumber: number;
   url: string;
   updateDate: string;
   congress: number;
@@ -959,7 +959,7 @@ export interface CommitteePrintsResponse {
 
 // Committee Print Item Level Response
 export interface CommitteePrintDetails {
-  jacketNumber: string;
+  jacketNumber: number;
   citation?: string; // May not be numbered by committee
   congress: number;
   number?: string;
@@ -980,10 +980,14 @@ export interface CommitteePrintDetails {
     count: number;
     url: string;
   };
+  updateDate: string;
 }
 
 export interface CommitteePrintResponse {
-  committeePrint: CommitteePrintDetails;
+  /**
+   * Array of length 1
+   */
+  committeePrint: CommitteePrintDetails[];
   pagination: PaginationInfo;
 }
 
@@ -1024,9 +1028,9 @@ export interface CommitteeReportDetails {
   }[];
   congress: number;
   chamber: "House" | "Senate";
-  sessionNumber: "1" | "2";
+  sessionNumber: 1 | 2;
   citation: string;
-  number: string;
+  number: number;
   part: number;
   type: "HRPT" | "SRPT" | "ERPT";
   updateDate: string;
@@ -1066,7 +1070,7 @@ export interface CommitteeReportTextItem {
 }
 
 export interface CommitteeReportTextResponse {
-  textVersions: CommitteeReportTextItem[];
+  text: CommitteeReportTextItem[];
   pagination: PaginationInfo;
 }
 
