@@ -910,32 +910,33 @@ export interface CommitteeMeetingDetails {
     url: string;
     format: string;
   }[];
+  // TBD
   hearingTranscript?: {
     jacketNumber: string;
     url: string;
   };
+  // TBD
   relatedItems?: {
     bills?: {
-      bill: {
-        type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
-        number: string;
-        congress: number;
-        url: string;
-      }[];
-    };
+      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+      number: string;
+      congress: number;
+      url: string;
+    }[];
     treaties?: {
       part?: string;
       number: string;
       congress: number;
       url: string;
     }[];
+    // TBD
+    nominations?: {
+      part: string; // "00" if not partitioned
+      number: string;
+      congress: number;
+      url: string;
+    }[];
   };
-  nominations?: {
-    part: string; // "00" if not partitioned
-    number: string;
-    congress: number;
-    url: string;
-  }[];
 }
 
 export interface CommitteeMeetingResponse {
