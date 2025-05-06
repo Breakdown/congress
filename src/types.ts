@@ -1150,12 +1150,12 @@ export interface DailyCongressionalRecordArticlesResponse {
 
 // Hearing List Level Response
 export interface HearingListItem {
-  jacketNumber: string;
+  jacketNumber: number;
   updateDate: string;
   chamber: "House" | "Senate" | "NoChamber";
   congress: number;
-  number?: string; // Hearings may or may not be numbered by committee
-  part?: string; // If printed in parts
+  // number?: string; // Hearings may or may not be numbered by committee
+  // part?: string; // If printed in parts
   url: string;
 }
 
