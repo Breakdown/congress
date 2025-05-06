@@ -743,13 +743,12 @@ export interface CommitteeNominationsResponse {
 // House Communications Level Response
 export interface HouseCommunicationItem {
   chamber: "House";
-  number: string;
+  number: number;
   communicationType: {
     code: "EC" | "PM" | "PT" | "ML";
     name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
   };
   congress: number;
-  referralDate: string;
   updateDate: string;
   url: string;
 }
@@ -764,11 +763,12 @@ export interface HouseCommunicationDetails extends HouseCommunicationItem {
   abstract: string;
   congressionalRecordDate: string;
   sessionNumber: string;
-  isRulemaking: "Y" | "N";
+  isRulemaking: "True" | "False";
   committees?: {
     name: string;
     referralDate: string;
     systemCode: string;
+    url: string;
   }[];
   matchingRequirements?: {
     number: string;
@@ -778,6 +778,7 @@ export interface HouseCommunicationDetails extends HouseCommunicationItem {
   submittingAgency?: string;
   submittingOfficial?: string;
   legalAuthority?: string;
+  // To be seen
   houseDocument?: {
     citation: string;
     title: string;
@@ -786,10 +787,6 @@ export interface HouseCommunicationDetails extends HouseCommunicationItem {
 
 export interface HouseCommunicationResponse {
   houseCommunication: HouseCommunicationDetails;
-  request: {
-    contentType: string;
-    format: string;
-  };
 }
 
 // Senate Communications Level Response
@@ -803,7 +800,6 @@ export interface SenateCommunicationListItem {
   congress: number;
   url: string;
   updateDate: string;
-  referralDate: string;
 }
 
 export interface SenateCommunicationsResponse {
