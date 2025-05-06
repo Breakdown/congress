@@ -1056,7 +1056,13 @@ class CongressService {
     return this.makeRequest(path, { limit, offset });
   }
 
-  // Get detailed information about a committee meeting
+  /**
+   * Get detailed information about a committee meeting
+   * @param congress - The congress number (e.g. 117)
+   * @param chamber - The chamber ("house" or "senate")
+   * @param eventId - The event ID of the committee meeting
+   * @returns CommitteeMeetingResponse containing detailed information about the specified committee meeting
+   */
   async getCommitteeMeeting({
     congress,
     chamber,
@@ -1069,7 +1075,15 @@ class CongressService {
     return this.makeRequest(`/committee-meeting/${congress}/${chamber}/${eventId}`);
   }
 
-  // Get list of committee prints
+  /**
+   * Get list of committee prints
+   * @param options - Query options
+   * @param options.congress - Optional congress number to filter by
+   * @param options.chamber - Optional chamber to filter by ("house" or "senate")
+   * @param options.limit - Number of results to return (default 20)
+   * @param options.offset - Number of results to skip (default 0)
+   * @returns CommitteePrintsResponse containing print information including dates, locations, and related documents
+   */
   async getCommitteePrints({
     congress,
     chamber,
@@ -1086,7 +1100,13 @@ class CongressService {
     return this.makeRequest(path, { limit, offset });
   }
 
-  // Get detailed information about a committee print
+  /**
+   * Get detailed information about a committee print
+   * @param congress - The congress number (e.g. 117)
+   * @param chamber - The chamber ("house" or "senate")
+   * @param jacketNumber - The jacket number of the committee print
+   * @returns CommitteePrintResponse containing detailed information about the specified committee print
+   */
   async getCommitteePrint({
     congress,
     chamber,
@@ -1099,7 +1119,13 @@ class CongressService {
     return this.makeRequest(`/committee-print/${congress}/${chamber}/${jacketNumber}`);
   }
 
-  // Get text formats for a committee print
+  /**
+   * Get text formats for a committee print
+   * @param congress - The congress number (e.g. 117)
+   * @param chamber - The chamber ("house" or "senate")
+   * @param jacketNumber - The jacket number of the committee print
+   * @returns CommitteePrintTextResponse containing text versions in different formats (PDF, HTML)
+   */
   async getCommitteePrintText({
     congress,
     chamber,
@@ -1112,7 +1138,15 @@ class CongressService {
     return this.makeRequest(`/committee-print/${congress}/${chamber}/${jacketNumber}/text`);
   }
 
-  // Get list of committee reports
+  /**
+   * Get list of committee reports
+   * @param options - Query options
+   * @param options.congress - Optional congress number to filter by
+   * @param options.reportType - Optional report type to filter by ("hrpt", "srpt", "erpt")
+   * @param options.limit - Number of results to return (default 20)
+   * @param options.offset - Number of results to skip (default 0)
+   * @returns CommitteeReportsResponse containing report information including dates, locations, and related documents
+   */
   async getCommitteeReports({
     congress,
     reportType,
@@ -1129,7 +1163,14 @@ class CongressService {
     return this.makeRequest(path, { limit, offset });
   }
 
-  // Get detailed information about a committee report
+  /**
+   * Get detailed information about a committee report
+   * @param congress - The congress number (e.g. 117)
+   * @param reportType - The report type ("hrpt", "srpt", "erpt")
+   * @param reportNumber - The report number
+   * @param part - Optional part number of the report
+   * @returns CommitteeReportResponse containing detailed information about the specified committee report
+   */
   async getCommitteeReport({
     congress,
     reportType,
@@ -1146,7 +1187,14 @@ class CongressService {
     );
   }
 
-  // Get text formats for a committee report
+  /**
+   * Get text formats for a committee report
+   * @param congress - The congress number (e.g. 117)
+   * @param reportType - The report type ("hrpt", "srpt", "erpt")
+   * @param reportNumber - The report number
+   * @param part - Optional part number of the report
+   * @returns CommitteeReportTextResponse containing text versions in different formats (PDF, HTML)
+   */
   async getCommitteeReportText({
     congress,
     reportType,
