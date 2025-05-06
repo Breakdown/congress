@@ -1356,29 +1356,6 @@ class CongressService {
   }
 
   /**
-   * Get text versions of a treaty
-   * @param options - Query options
-   * @param options.congress - The congress number (e.g. 117)
-   * @param options.treatyNumber - The treaty number
-   * @param options.treatySuffix - Optional suffix identifier for partitioned treaties (e.g. "A", "B", "C")
-   * @returns TreatyTextResponse containing text versions in different formats (PDF, HTML)
-   */
-  async getTreatyText({
-    congress,
-    treatyNumber,
-    treatySuffix,
-  }: {
-    congress: number;
-    treatyNumber: string;
-    treatySuffix?: string;
-  }): Promise<TreatyTextResponse> {
-    const path = treatySuffix
-      ? `/treaty/${congress}/${treatyNumber}/${treatySuffix}/text`
-      : `/treaty/${congress}/${treatyNumber}/text`;
-    return this.makeRequest(path);
-  }
-
-  /**
    * Get committees associated with a treaty
    * @param options - Query options
    * @param options.congress - The congress number (e.g. 117)

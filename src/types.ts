@@ -1465,6 +1465,20 @@ export interface TreatyDetails extends TreatyListItem {
     count: number;
     url: string;
   };
+  indexTerms?: {
+    name: string;
+  }[];
+  oldNumber: string | null;
+  oldNumberDisplayName: string | null;
+  relatedDocs: {
+    type: string;
+    url: string;
+  }[];
+  resolutionText: string;
+  titles: {
+    title: string;
+    titleType: string;
+  }[];
 }
 
 export interface TreatyResponse {
@@ -1477,15 +1491,16 @@ export interface TreatyAction {
   actionDate: string;
   text: string;
   actionCode?: string;
-  committees?: {
+  committee?: {
     url: string;
     systemCode: string;
     name: string;
-  }[];
+  };
 }
 
 export interface TreatyActionsResponse {
   actions: TreatyAction[];
+  pagination: PaginationInfo;
 }
 
 // Treaty Text Level Response
@@ -1499,6 +1514,7 @@ export interface TreatyTextVersion {
 
 export interface TreatyTextResponse {
   textVersions: TreatyTextVersion[];
+  pagination: PaginationInfo;
 }
 
 // Treaty Committees Level Response
@@ -1513,15 +1529,17 @@ export interface TreatyCommitteeItem {
   name: string;
   chamber: "Senate";
   type: "Standing" | "Select" | "Other";
-  subcommittees?: {
-    name: string;
-    systemCode: string;
-    url: string;
-    activities: TreatyCommitteeActivity[];
-  }[];
+  // Unverified
+  // subcommittees?: {
+  //   name: string;
+  //   systemCode: string;
+  //   url: string;
+  //   activities: TreatyCommitteeActivity[];
+  // }[];
   activities: TreatyCommitteeActivity[];
 }
 
 export interface TreatyCommitteesResponse {
   committees: TreatyCommitteeItem[];
+  pagination: PaginationInfo;
 }
