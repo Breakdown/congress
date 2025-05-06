@@ -905,7 +905,7 @@ class CongressService {
     congress?: number;
     chamber?: "house" | "senate";
   } & PaginationParams): Promise<CommitteesResponse> {
-    const path = congress ? `/committee/${congress}${chamber ? `/${chamber}` : ""}` : "/committee";
+    const path = congress ? `/committee/${congress}${chamber ? `/${chamber}` : ""}` : "";
 
     return this.makeRequest(path, { limit, offset });
   }

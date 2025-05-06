@@ -600,9 +600,9 @@ export interface CRSReportDetails extends CRSReportBase {
     url: string;
   }[];
   relatedMaterials?: {
-    title: string | null;
+    title?: string;
     congress?: number;
-    number?: string;
+    number?: number;
     type?: string; // e.g. "PUB", "PRIV", "HR", "S"
     URL: string; // URL to the related material API endpoint
   }[];
@@ -619,12 +619,6 @@ export interface CRSReportsResponse {
 
 export interface CRSReportResponse {
   CRSReport: CRSReportDetails; // Note the key is singular "CRSReport"
-  request?: {
-    contentType: string;
-    format: string;
-    report_id?: string; // Including report_id based on example
-    [key: string]: any; // Allow other potential request params
-  };
 }
 
 // Committee List Level Response
@@ -632,6 +626,7 @@ export interface CommitteeListItem {
   url: string;
   systemCode: string;
   name: string;
+  updateDate: string;
   parent?: {
     url: string;
     systemCode: string;
@@ -666,6 +661,19 @@ export interface CommitteeDetails {
     systemCode: string;
     name: string;
   };
+  history: {
+    updateDate: string;
+    chamber: string;
+    startDate: string;
+    endDate: string;
+    libraryOfCongressName: string;
+    committeeTypeCode?: string;
+    establishingAuthority?: string;
+    locLinkedDataId?: string;
+    naraId?: string;
+    officialName?: string;
+    superintendentDocumentNumber?: string;
+  }[];
   updateDate: string;
   isCurrent: boolean;
   subcommittees?: {
@@ -673,7 +681,6 @@ export interface CommitteeDetails {
     systemCode: string;
     name: string;
   }[];
-  name: string;
   chamber: "House" | "Senate" | "Joint";
   committeeTypeCode:
     | "Commission or Caucus"
@@ -685,18 +692,22 @@ export interface CommitteeDetails {
     | "Subcommittee"
     | "Task Force";
   url: string;
+  communications?: {
+    url: string;
+    count: number;
+  }[];
+  nominations?: {
+    url: string;
+    count: number;
+  }[];
+  reports?: {
+    url: string;
+    count: number;
+  }[];
   bills?: {
     url: string;
     count: number;
-    bills: {
-      congress: number;
-      billType: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
-      billNumber: string;
-      relationshipType: string;
-      actionDate: string;
-      updateDate: string;
-    }[];
-  };
+  }[];
 }
 
 export interface CommitteeResponse {
@@ -711,20 +722,22 @@ export interface CommitteeNominationItem {
   citation: string;
   description: string;
   receivedDate: string;
+  updateDate: string;
+  url: string;
   nominationType: {
     isCivilian: boolean;
     inMilitary: boolean;
   };
-  updateDate: string;
   latestAction: {
     actionDate: string;
     text: string;
-    url: string;
+    url?: string;
   };
 }
 
 export interface CommitteeNominationsResponse {
   nominations: CommitteeNominationItem[];
+  pagination: PaginationInfo;
 }
 
 // House Communications Level Response
@@ -790,6 +803,7 @@ export interface SenateCommunicationListItem {
   congress: number;
   url: string;
   updateDate: string;
+  referralDate: string;
 }
 
 export interface SenateCommunicationsResponse {
