@@ -1504,18 +1504,18 @@ export interface TreatyActionsResponse {
 }
 
 // Treaty Text Level Response
-export interface TreatyTextVersion {
-  date: string;
-  formats: {
-    url: string;
-    type: "PDF" | "HTML";
-  }[];
-}
+// export interface TreatyTextVersion {
+//   date: string;
+//   formats: {
+//     url: string;
+//     type: "PDF" | "HTML";
+//   }[];
+// }
 
-export interface TreatyTextResponse {
-  textVersions: TreatyTextVersion[];
-  pagination: PaginationInfo;
-}
+// export interface TreatyTextResponse {
+//   textVersions: TreatyTextVersion[];
+//   pagination: PaginationInfo;
+// }
 
 // Treaty Committees Level Response
 export interface TreatyCommitteeActivity {

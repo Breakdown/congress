@@ -48,7 +48,6 @@ import {
   TreatiesResponse,
   TreatyResponse,
   TreatyActionsResponse,
-  TreatyTextResponse,
   TreatyCommitteesResponse,
   SponsoredLegislationResponse,
   AmendmentResponse,
