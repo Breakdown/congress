@@ -51,6 +51,9 @@ import {
   TreatyCommitteesResponse,
   SponsoredLegislationResponse,
   AmendmentResponse,
+  HouseRollCallVoteMemberVotesResponse,
+  HouseRollCallResponse,
+  HouseRollCallVotesResponse,
 } from "./types";
 
 const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3";
@@ -1423,6 +1426,70 @@ class CongressService {
       ? `/treaty/${congress}/${treatyNumber}/${treatySuffix}/committees`
       : `/treaty/${congress}/${treatyNumber}/committees`;
     return this.makeRequest(path);
+  }
+
+  /**
+   * BETA: Get a list of House Roll Call Votes
+   * @param options - Query options
+   * @param options.congress - Optional congress number to filter by (e.g. 119)
+   * @param options.session - Optional session number to filter by (e.g. 1 or 2)
+   * @param options.limit - Number of results to return (default 20)
+   * @param options.offset - Number of results to skip (default 0)
+   * @returns HouseRollCallVotesResponse containing vote information including congress, session, roll call numbers, and results
+   */
+  async getHouseRollCallVotes({
+    congress,
+    session,
+    limit = 20,
+    offset = 0,
+  }: {
+    congress?: number;
+    session?: number;
+  } & PaginationParams): Promise<HouseRollCallVotesResponse> {
+    return this.makeRequest(
+      `/house-vote/${congress ? `${congress}/` : ""}${session ? `${session}/` : ""}`,
+      { limit, offset }
+    );
+  }
+
+  /**
+   * BETA: Get detailed information about a specific House Roll Call Vote
+   * @param options - Query options
+   * @param options.congress - The congress number (e.g. 119)
+   * @param options.session - The session number (e.g. 1 or 2)
+   * @param options.voteNumber - The vote number
+   * @returns HouseRollCallResponse containing detailed vote information including party totals and vote question
+   */
+  async getHouseRollCallVote({
+    congress,
+    session,
+    voteNumber,
+  }: {
+    congress: number;
+    session: number;
+    voteNumber: string;
+  }): Promise<HouseRollCallResponse> {
+    return this.makeRequest(`/house-vote/${congress}/${session}/${voteNumber}`);
+  }
+
+  /**
+   * BETA: Get member voting data for a specific House Roll Call Vote
+   * @param options - Query options
+   * @param options.congress - The congress number (e.g. 119)
+   * @param options.session - The session number (e.g. 1 or 2)
+   * @param options.voteNumber - The vote number
+   * @returns HouseRollCallVoteMemberVotesResponse containing individual member voting data
+   */
+  async getHouseRollCallVoteMemberVotes({
+    congress,
+    session,
+    voteNumber,
+  }: {
+    congress: number;
+    session: number;
+    voteNumber: string;
+  }): Promise<HouseRollCallVoteMemberVotesResponse> {
+    return this.makeRequest(`/house-vote/${congress}/${session}/${voteNumber}/members`);
   }
 }
 

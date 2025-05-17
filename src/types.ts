@@ -1543,3 +1543,96 @@ export interface TreatyCommitteesResponse {
   committees: TreatyCommitteeItem[];
   pagination: PaginationInfo;
 }
+
+export interface HouseRollCallVotesResponse {
+  houseRollCallVotes: HouseRollCallVoteListItem[];
+  pagination: {
+    count: number;
+    next?: string;
+  };
+  request: {
+    congress?: string;
+    contentType: string;
+    format: string;
+    session?: string;
+  };
+}
+
+export interface HouseRollCallVoteListItem {
+  congress: number;
+  identifier: number;
+  legislationNumber?: string;
+  legislationType?: string;
+  legislationUrl?: string;
+  result: string;
+  rollCallNumber: number;
+  sessionNumber: number;
+  sourceDataURL: string;
+  startDate: string;
+  updateDate: string;
+  url: string;
+  voteType: string;
+}
+
+export interface HouseRollCallResponse {
+  houseRollCallVote: {
+    congress: number;
+    identifier: number;
+    legislationNumber?: number | string;
+    legislationType?: string;
+    legislationUrl?: string;
+    result: string;
+    rollCallNumber: number;
+    sessionNumber: number;
+    sourceDataURL: string;
+    startDate: string;
+    updateDate: string;
+    votePartyTotal: VotePartyTotal[];
+    voteQuestion: string;
+    voteType: string;
+  };
+  request: {
+    congress: string;
+    contentType: string;
+    format: string;
+    session: string;
+  };
+}
+
+interface VotePartyTotal {
+  nayTotal: number;
+  notVotingTotal: number;
+  party: {
+    name: string;
+    type: string;
+  };
+  presentTotal: number;
+  voteParty: string;
+  yeaTotal: number;
+}
+
+export interface HouseRollCallVoteMemberVotesResponse {
+  houseRollCallVoteMemberVotes: {
+    congress: number;
+    identifier: number;
+    legislationNumber?: number | string;
+    legislationType?: string;
+    legislationUrl?: string;
+    results: MemberVote[];
+  };
+  request: {
+    congress: string;
+    contentType: string;
+    format: string;
+    session: string;
+  };
+}
+
+export interface MemberVote {
+  bioguideID: string;
+  firstName: string;
+  lastName: string;
+  voteCast: string;
+  voteParty: string;
+  voteState: string;
+}
