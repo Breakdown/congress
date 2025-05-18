@@ -653,6 +653,7 @@ export interface CommitteeListItem {
 
 export interface CommitteesResponse {
   committees: CommitteeListItem[];
+  pagination: PaginationInfo;
 }
 
 // Committee Item Level Response
