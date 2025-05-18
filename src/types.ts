@@ -173,6 +173,7 @@ export interface BillDetails {
   updateDate: string;
   updateDateIncludingText: string;
   originChamber: string;
+  originChamberCode: string;
   type: string;
   introducedDate: string;
   congress: number;
