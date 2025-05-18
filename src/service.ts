@@ -54,6 +54,7 @@ import {
   HouseRollCallVoteMemberVotesResponse,
   HouseRollCallResponse,
   HouseRollCallVotesResponse,
+  TitlesResponse,
 } from "./types";
 
 const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3";
@@ -503,6 +504,18 @@ class CongressService {
     billNumber: number;
   }): Promise<SummariesResponse> {
     return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/summaries`);
+  }
+
+  async getTitlesForBill({
+    congress = ACTIVE_CONGRESS,
+    billType,
+    billNumber,
+  }: {
+    congress: number;
+    billType: string;
+    billNumber: number;
+  }): Promise<TitlesResponse> {
+    return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/titles`);
   }
 
   /**
