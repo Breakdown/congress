@@ -56,9 +56,9 @@ import {
   HouseRollCallVotesResponse,
   TitlesResponse,
 } from "./types";
+import { ACTIVE_CONGRESS } from "./consts";
 
 const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3";
-const ACTIVE_CONGRESS = 119;
 
 /**
  * Service class for interacting with the Congress.gov API.
@@ -506,6 +506,14 @@ class CongressService {
     return this.makeRequest(`/bill/${congress}/${billType}/${billNumber}/summaries`);
   }
 
+  /**
+   * Retrieves the titles for a specific bill.
+   * @param options - Query parameters to identify the bill.
+   * @param options.congress - The congress number (e.g., 117, default: ACTIVE_CONGRESS).
+   * @param options.billType - The type of the bill (e.g., "hr", "s"). Case-insensitive.
+   * @param options.billNumber - The number of the bill (e.g., 1234).
+   * @returns A promise resolving to a `TitlesResponse` object containing the titles for the specified bill.
+   */
   async getTitlesForBill({
     congress = ACTIVE_CONGRESS,
     billType,
