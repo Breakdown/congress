@@ -1576,29 +1576,25 @@ export interface HouseRollCallVoteListItem {
   voteType: string;
 }
 
+export interface HouseRollCallVoteDetails {
+  congress: number;
+  identifier: number;
+  legislationNumber?: number | string;
+  legislationType?: string;
+  legislationUrl?: string;
+  result: string;
+  rollCallNumber: number;
+  sessionNumber: number;
+  sourceDataURL: string;
+  startDate: string;
+  updateDate: string;
+  votePartyTotal: VotePartyTotal[];
+  voteQuestion: string;
+  voteType: string;
+}
+
 export interface HouseRollCallResponse {
-  houseRollCallVote: {
-    congress: number;
-    identifier: number;
-    legislationNumber?: number | string;
-    legislationType?: string;
-    legislationUrl?: string;
-    result: string;
-    rollCallNumber: number;
-    sessionNumber: number;
-    sourceDataURL: string;
-    startDate: string;
-    updateDate: string;
-    votePartyTotal: VotePartyTotal[];
-    voteQuestion: string;
-    voteType: string;
-  };
-  request: {
-    congress: string;
-    contentType: string;
-    format: string;
-    session: string;
-  };
+  houseRollCallVote: HouseRollCallVoteDetails;
 }
 
 interface VotePartyTotal {
@@ -1621,12 +1617,6 @@ export interface HouseRollCallVoteMemberVotesResponse {
     legislationType?: string;
     legislationUrl?: string;
     results: MemberVote[];
-  };
-  request: {
-    congress: string;
-    contentType: string;
-    format: string;
-    session: string;
   };
 }
 
