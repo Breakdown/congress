@@ -1,0 +1,83 @@
+name: Release NPM Package
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release Package
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, 'Chore: Release') }}
+    permissions:
+      contents: write
+      packages: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+          registry-url: 'https://npm.pkg.github.com'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Package
+        run: npm run build
+
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Configure NPM
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Patch Release
+        if: ${{ !contains(github.event.head_commit.message, '[Release:Minor]') }}
+        run: npm run release-ci-patch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run Minor Release
+        if: ${{ contains(github.event.head_commit.message, '[Release:Minor]') }}
+        run: npm run release-ci-minor
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # this is to see if we can get the branch name that was merged into main
+      # if so, we can use that to only clean up pre-releases for that branch
+      - name: Get Source Branch
+        run: |
+          echo "SOURCE_BRANCH_V1=${{ github.event.pull_request.head.ref }}" >> "$GITHUB_ENV"
+          LATESTLOG=$(git log -1 --pretty=%B)
+          SOURCEBRANCH=$(echo $LATESTLOG | awk -F '\\\\n' '{print $1}' |  awk -F '/' '{print $2}' | awk '{print $1}')
+          echo "SOURCE_BRANCH_V2=$SOURCEBRANCH" >> "$GITHUB_ENV"
+
+      - name: Output Source Branch
+        run: |
+          echo "SOURCE_BRANCH_V1: $SOURCE_BRANCH_V1"
+          echo "SOURCE_BRANCH_V2: $SOURCE_BRANCH_V2"
+
+      # in the meantime, just clean up all but the last 20 pre-releases
+      # this way merging one branch shouldn't delete the pre-releases of another active branch
+      - name: Clean up old pre-releases
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: '@breakdown_us/congress'
+          package-type: 'npm'
+          min-versions-to-keep: 20
+          delete-only-pre-release-versions: 'true'
+          token: ${{ secrets.GITHUB_TOKEN }}

@@ -213,11 +213,17 @@ try {
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
-## CI
-
-This project uses GitHub Actions for continuous integration, so if you're contributing you can PR with confidence!
-
 - **CI Workflow**: Runs on pull requests to verify build status.
+
+## Development & Release
+
+This package uses automated releases with GitHub Actions and GitHub Packages:
+
+- **Patch releases**: Automatically triggered on push to `main` branch
+- **Minor releases**: Include `[Release:Minor]` in commit message when pushing to `main`
+- **Pre-releases**: Add `prerelease` label to pull requests
+
+See [.github/SETUP.md](.github/SETUP.md) for detailed configuration instructions.
 
 ## License
 
