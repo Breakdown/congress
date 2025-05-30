@@ -1,0 +1,52 @@
+{
+  "name": "@breakdown_us/congress",
+  "version": "1.0.12",
+  "description": "A TypeScript client for the congress.gov API",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/esm/index.js",
+      "require": "./dist/cjs/index.js",
+      "types": "./dist/types/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "clean": "rimraf dist",
+    "build": "npm run clean && npm run build:cjs && npm run build:esm && npm run build:types",
+    "build:cjs": "tsc -p tsconfig.cjs.json",
+    "build:esm": "tsc -p tsconfig.esm.json",
+    "build:types": "tsc -p tsconfig.types.json",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run build"
+  },
+  "author": "Ryan Oillataguerre",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "congress",
+    "congress.gov",
+    "api",
+    "government",
+    "politics",
+    "usa",
+    "typescript"
+  ],
+  "repository": "https://github.com/ryanoillataguerre/congress.git",
+  "bugs": {
+    "url": "https://github.com/ryanoillataguerre/congress/issues"
+  },
+  "homepage": "https://github.com/ryanoillataguerre/congress#readme",
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}
