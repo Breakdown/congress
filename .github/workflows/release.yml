@@ -37,6 +37,12 @@ jobs:
         run: |
           git remote set-url origin git@github.com:Breakdown/congress.git
 
+        # Configure SSH with private SSH key
+      - name: Attach SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
       - name: Configure NPM
         run: |
           npm config set //npm.pkg.github.com/:_authToken ${{ secrets.RELEASE_GITHUB_TOKEN }}

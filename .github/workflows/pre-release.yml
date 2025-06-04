@@ -1,0 +1,50 @@
+name: Prerelease NPM Package
+
+on:
+  pull_request:
+    types: [labeled, opened, synchronize, reopened]
+
+jobs:
+  release:
+    if: ${{ github.event.label.name == 'prerelease' || contains( github.event.pull_request.labels.*.name, 'prerelease' ) }}
+    name: Release Package
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build Package
+        run: npm run build
+
+      - name: Configure Git
+        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
+        with:
+          global: true
+          token: "${{ secrets.RELEASE_GITHUB_TOKEN }}"
+
+      - name: Configure NPM
+        run: |
+          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.RELEASE_GITHUB_TOKEN }}
+
+      # incrementing a pre-release version like 0.3.24-prerelease.0 to 0.3.24-prerelease.1 is only supported if you update and commit package.json
+      # that'd be really annoying in a dev branch, so instead, this creates a new prelease name like 0.3.24-[branchname]-[sha].0 that'll always be unique and readable
+      - name: Get Ref
+        id: ref
+        run: |
+          SHA_SHORT=$(git rev-parse --short ${{ github.event.pull_request.head.sha }} )
+          BRANCH=$(echo '${{ github.head_ref || github.ref_name }}' | iconv -t ascii//TRANSLIT | sed -r s/[^a-zA-Z0-9]+/-/g | sed -r s/^-+\|-+$//g | tr A-Z a-z)
+          echo "REF_NAME=$BRANCH-$SHA_SHORT" >> "$GITHUB_OUTPUT"
+
+      - name: Run Patch Release
+        run: npm run prerelease -- --preRelease=${{ steps.ref.outputs.REF_NAME }} --npm.tag=${{ steps.ref.outputs.REF_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
