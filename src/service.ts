@@ -57,9 +57,7 @@ import {
   TitlesResponse,
   CosponsoredLegislationResponse,
 } from "./types";
-import { ACTIVE_CONGRESS } from "./consts";
-
-const CONGRESS_GOV_BASE_API_URL = "https://api.congress.gov/v3/";
+import { ACTIVE_CONGRESS, CONGRESS_GOV_BASE_API_URL } from "./consts";
 
 /**
  * Service class for interacting with the Congress.gov API.
@@ -96,7 +94,6 @@ class CongressService {
         url.searchParams.append(key, value.toString());
       }
     });
-
 
     const response = await fetch(url.toString(), {
       headers: {
@@ -671,9 +668,7 @@ class CongressService {
     fromDateTime?: Date;
     toDateTime?: Date;
   } & PaginationParams): Promise<SummariesListResponse> {
-    const path = congress
-      ? `summaries/${congress}${billType ? `/${billType}` : ""}`
-      : "summaries";
+    const path = congress ? `summaries/${congress}${billType ? `/${billType}` : ""}` : "summaries";
 
     return this.makeRequest(path, {
       limit,
@@ -737,7 +732,9 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<AmendmentResponse> {
-    return this.makeRequest(`amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}`);
+    return this.makeRequest(
+      `amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}`
+    );
   }
 
   /**
@@ -801,7 +798,9 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<BillTextResponse> {
-    return this.makeRequest(`amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}/text`);
+    return this.makeRequest(
+      `amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}/text`
+    );
   }
 
   /**
@@ -821,7 +820,9 @@ class CongressService {
     amendmentType: "SAMDT" | "HAMDT" | "SUAMDT";
     amendmentNumber: string;
   }): Promise<ActionsResponse> {
-    return this.makeRequest(`amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}/actions`);
+    return this.makeRequest(
+      `amendment/${congress}/${amendmentType.toLowerCase()}/${amendmentNumber}/actions`
+    );
   }
 
   /**
