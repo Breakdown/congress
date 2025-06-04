@@ -7,14 +7,11 @@ on:
 
 jobs:
   release:
+    if: ${{ !contains(github.event.head_commit.message, 'Chore:Release') }}
     name: Release Package
     runs-on: ubuntu-latest
-    if: ${{ !contains(github.event.head_commit.message, 'Chore:') }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -22,7 +19,6 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "npm"
           cache-dependency-path: package-lock.json
-          registry-url: "https://npm.pkg.github.com"
 
       - name: Install Dependencies
         run: npm ci
@@ -31,27 +27,37 @@ jobs:
         run: npm run build
 
       - name: Configure Git
+        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
+        with:
+          global: true
+          token: "${{ secrets.RELEASE_GITHUB_TOKEN }}"
+
+        # Change git remote to be SSH so that release-it can get around PR requirement
+      - name: Change git remote to use SSH
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git remote set-url origin git@github.com:ghosts-inc/hauntings.git
+
+        # Configure SSH with private SSH key
+      - name: Attach SSH key
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       - name: Configure NPM
         run: |
           npm config set //npm.pkg.github.com/:_authToken ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Run Patch Release
-        if: ${{ !contains(github.event.head_commit.message, '[Release:Minor]') }}
-        run: npm run release-ci-patch
+        if: ${{ !contains(github.event.head_commit.message, '[Release:Patch]') }}
+        run: cd types && npm run release-ci-patch
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       - name: Run Minor Release
         if: ${{ contains(github.event.head_commit.message, '[Release:Minor]') }}
-        run: npm run release-ci-minor
+        run: cd types && npm run release-ci-minor
         env:
           GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
 
       # this is to see if we can get the branch name that was merged into main
       # if so, we can use that to only clean up pre-releases for that branch
@@ -72,7 +78,7 @@ jobs:
       - name: Clean up old pre-releases
         uses: actions/delete-package-versions@v5
         with:
-          package-name: "@breakdown_us/congress"
+          package-name: "hauntings-types"
           package-type: "npm"
           min-versions-to-keep: 20
           delete-only-pre-release-versions: "true"
