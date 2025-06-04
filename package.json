@@ -45,12 +45,12 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/ryanoillataguerre/congress.git"
+    "url": "https://github.com/Breakdown/congress.git"
   },
   "bugs": {
-    "url": "https://github.com/ryanoillataguerre/congress/issues"
+    "url": "https://github.com/Breakdown/congress/issues"
   },
-  "homepage": "https://github.com/ryanoillataguerre/congress#readme",
+  "homepage": "https://github.com/Breakdown/congress#readme",
   "devDependencies": {
     "prettier": "^3.5.3",
     "release-it": "^17.6.0",
