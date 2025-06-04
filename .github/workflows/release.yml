@@ -7,64 +7,29 @@ on:
 
 jobs:
   release:
-    if: ${{ !contains(github.event.head_commit.message, 'Chore:Release') }}
-    name: Release Package
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
 
-      - name: Setup Node + npm auth
+    steps:
+      - name: Checkout current branch
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "npm"
-          registry-url: "https://npm.pkg.github.com"
-          always-auth: true
-          token: ${{ secrets.NPM_TOKEN }} # <-- writes the token into .npmrc
+          node-version: 20
 
-      - name: Install Dependencies
-        run: npm ci
+      - name: Install dependencies
+        run: yarn
 
-      - name: Build Package
-        run: npm run build
+      - name: Build package
+        run: yarn build
 
-      - name: Configure Git
-        uses: oleksiyrudenko/gha-git-credentials@v2.1.1
-        with:
-          global: true
-          token: "${{ secrets.GITHUB_TOKEN }}"
-
-        # Change git remote to be SSH so that release-it can get around PR requirement
-      - name: Change git remote to use SSH
-        run: |
-          git remote set-url origin git@github.com:Breakdown/congress.git
-
-        # Configure SSH with private SSH key
-      - name: Attach SSH key
-        uses: webfactory/ssh-agent@v0.9.0
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Add GitHub to known hosts
-        run: |
-          ssh-keyscan github.com >> ~/.ssh/known_hosts
-
-      - name: Test SSH connection
-        run: |
-          ssh -T git@github.com || true
-
-      - name: Configure NPM
-        run: |
-          npm config set //npm.pkg.github.com/:_authToken ${{ secrets.NPM_TOKEN }}
-
-      - name: Run Patch Release
-        if: ${{ !contains(github.event.head_commit.message, '[Release:Minor]') }}
-        run: npm run release-ci-patch
+      - name: Semantic Release
+        run: npx semantic-release
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Run Minor Release
-        if: ${{ contains(github.event.head_commit.message, '[Release:Minor]') }}
-        run: npm run release-ci-minor
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+permissions:
+  contents: write
+  pages: write
+  id-token: write
