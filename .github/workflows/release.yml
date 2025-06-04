@@ -19,8 +19,6 @@ jobs:
           node-version-file: ".nvmrc"
           cache: "npm"
           registry-url: "https://npm.pkg.github.com"
-          # optional but nice when you’re publishing an org-scoped pkg
-          scope: "@breakdown_us"
           always-auth: true
           token: ${{ secrets.NPM_TOKEN }} # <-- writes the token into .npmrc
 
