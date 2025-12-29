@@ -184,6 +184,7 @@ export interface BillDetails {
   congress: number;
   constitutionalAuthorityStatementText?: string; // Only for House Bills and Joint Resolutions
   title: string;
+  legislationUrl: string;
   committees?: {
     count: number;
     url: string;
@@ -368,13 +369,15 @@ export interface CosponsorsResponse {
 
 // Subjects Level Response
 export interface SubjectsResponse {
-  legislativeSubjects: {
-    name: string;
-    updateDate?: string;
-  }[];
-  policyArea: {
-    name: string;
-    updateDate: string;
+  subjects: {
+    legislativeSubjects: {
+      name: string;
+      updateDate?: string;
+    }[];
+    policyArea: {
+      name: string;
+      updateDate: string;
+    };
   };
   pagination: PaginationInfo;
 }
@@ -508,7 +511,7 @@ export interface LawListItem extends BaseBill {
   }[];
 }
 export interface LawsResponse {
-  laws: LawListItem[];
+  bills: LawListItem[];
   pagination: PaginationInfo;
 }
 
@@ -551,12 +554,6 @@ export interface FloorItem {
   "@_publish-date": string;
 }
 
-enum HouseEnum {
-  House,
-  Senate,
-  Joint,
-  Unknown,
-}
 
 // Bound Congressional Record Types
 export interface BoundCongressionalRecordItem {
@@ -646,14 +643,14 @@ export interface CommitteeListItem {
   }[];
   chamber: "House" | "Senate" | "Joint";
   committeeTypeCode:
-    | "Commission or Caucus"
-    | "Joint"
-    | "Other"
-    | "Select"
-    | "Special"
-    | "Standing"
-    | "Subcommittee"
-    | "Task Force";
+  | "Commission or Caucus"
+  | "Joint"
+  | "Other"
+  | "Select"
+  | "Special"
+  | "Standing"
+  | "Subcommittee"
+  | "Task Force";
 }
 
 export interface CommitteesResponse {
@@ -691,14 +688,14 @@ export interface CommitteeDetails {
   }[];
   chamber: "House" | "Senate" | "Joint";
   committeeTypeCode:
-    | "Commission or Caucus"
-    | "Joint"
-    | "Other"
-    | "Select"
-    | "Special"
-    | "Standing"
-    | "Subcommittee"
-    | "Task Force";
+  | "Commission or Caucus"
+  | "Joint"
+  | "Other"
+  | "Select"
+  | "Special"
+  | "Standing"
+  | "Subcommittee"
+  | "Task Force";
   url: string;
   communications?: {
     url: string;
@@ -754,7 +751,11 @@ export interface HouseCommunicationItem {
   number: number;
   communicationType: {
     code: "EC" | "PM" | "PT" | "ML";
-    name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
+    name:
+    | "Executive Communication"
+    | "Presidential Message"
+    | "Petition"
+    | "Memorial";
   };
   congress: number;
   updateDate: string;
@@ -803,7 +804,10 @@ export interface SenateCommunicationListItem {
   number: string;
   communicationType: {
     code: "EC" | "POM" | "PM";
-    name: "Executive Communication" | "Petition or Memorial" | "Presidential Message";
+    name:
+    | "Executive Communication"
+    | "Petition or Memorial"
+    | "Presidential Message";
   };
   congress: number;
   url: string;
@@ -816,7 +820,8 @@ export interface SenateCommunicationsResponse {
 }
 
 // Senate Communication Item Level Response
-export interface SenateCommunicationDetails extends SenateCommunicationListItem {
+export interface SenateCommunicationDetails
+  extends SenateCommunicationListItem {
   abstract: string;
   congressionalRecordDate: string;
   committees?: {
@@ -882,10 +887,10 @@ export interface CommitteeMeetingDetails {
   }[];
   witnessDocuments?: {
     documentType:
-      | "Witness Biography"
-      | "Witness Supporting Document"
-      | "Witness Statement"
-      | "Witness Truth in Testimony";
+    | "Witness Biography"
+    | "Witness Supporting Document"
+    | "Witness Statement"
+    | "Witness Truth in Testimony";
     format: string;
     url: string;
   }[];
@@ -893,24 +898,24 @@ export interface CommitteeMeetingDetails {
     name: string;
     description?: string;
     documentType:
-      | "Activity Report"
-      | "Bills and Resolutions"
-      | "Committee Amendment"
-      | "Committee Recorded Vote"
-      | "Committee Report"
-      | "Committee Rules"
-      | "Conference Report"
-      | "Floor Amendment"
-      | "Generic Document"
-      | "Hearing: Cover Page"
-      | "Hearing: Member Roster"
-      | "Hearing: Questions for the Record"
-      | "Hearing: Table of Contents"
-      | "Hearing: Transcript"
-      | "Hearing: Witness List"
-      | "House or Senate Amendment"
-      | "Member Statements"
-      | "Support Document";
+    | "Activity Report"
+    | "Bills and Resolutions"
+    | "Committee Amendment"
+    | "Committee Recorded Vote"
+    | "Committee Report"
+    | "Committee Rules"
+    | "Conference Report"
+    | "Floor Amendment"
+    | "Generic Document"
+    | "Hearing: Cover Page"
+    | "Hearing: Member Roster"
+    | "Hearing: Questions for the Record"
+    | "Hearing: Table of Contents"
+    | "Hearing: Transcript"
+    | "Hearing: Witness List"
+    | "House or Senate Amendment"
+    | "Member Statements"
+    | "Support Document";
     url: string;
     format: string;
   }[];
@@ -922,7 +927,15 @@ export interface CommitteeMeetingDetails {
   // TBD
   relatedItems?: {
     bills?: {
-      type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+      type:
+      | "HR"
+      | "S"
+      | "HJRES"
+      | "SJRES"
+      | "HCONRES"
+      | "SCONRES"
+      | "HRES"
+      | "SRES";
       number: string;
       congress: number;
       url: string;
@@ -976,7 +989,15 @@ export interface CommitteePrintDetails {
   }[];
   associatedBills?: {
     congress: number;
-    type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+    type:
+    | "HR"
+    | "S"
+    | "HJRES"
+    | "SJRES"
+    | "HCONRES"
+    | "SCONRES"
+    | "HRES"
+    | "SRES";
     number: string;
     url: string;
   }[];
@@ -1054,7 +1075,15 @@ export interface CommitteeReportDetails {
   }[];
   associatedBills?: {
     congress: number;
-    type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+    type:
+    | "HR"
+    | "S"
+    | "HJRES"
+    | "SJRES"
+    | "HCONRES"
+    | "SCONRES"
+    | "HRES"
+    | "SRES";
     number: string;
     url: string;
   }[];
@@ -1249,7 +1278,11 @@ export interface HouseRequirementMatchingCommunicationsResponse {
     number: string;
     communicationType: {
       code: "EC" | "PM" | "PT" | "ML";
-      name: "Executive Communication" | "Presidential Message" | "Petition" | "Memorial";
+      name:
+      | "Executive Communication"
+      | "Presidential Message"
+      | "Petition"
+      | "Memorial";
     };
     congress: number;
     url: string;
@@ -1406,7 +1439,15 @@ export interface NominationHearingsResponse {
 // Summaries List Level Response
 export interface SummaryBill {
   congress: number;
-  type: "HR" | "S" | "HJRES" | "SJRES" | "HCONRES" | "SCONRES" | "HRES" | "SRES";
+  type:
+  | "HR"
+  | "S"
+  | "HJRES"
+  | "SJRES"
+  | "HCONRES"
+  | "SCONRES"
+  | "HRES"
+  | "SRES";
   originChamber: "House" | "Senate";
   originChamberCode: "H" | "S";
   number: string;
