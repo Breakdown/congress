@@ -1,6 +1,6 @@
 # @breakdown_us/congress
 
-A TypeScript client for the [congress.gov API](https://api.congress.gov/) that provides strongly typed access to legislative information from the U.S. Congress. Source for types can be found at [LibraryOfCongress/api.congress.gov](https://github.com/LibraryOfCongress/api.congress.gov)
+A TypeScript client for the [congress.gov API](https://api.congress.gov/) that provides strongly typed access to legislative information from the U.S. Congress. Made by the team at [Breakdown](https://breakdown.us/) Source for types can be found at [LibraryOfCongress/api.congress.gov](https://github.com/LibraryOfCongress/api.congress.gov)
 
 ## Installation
 
